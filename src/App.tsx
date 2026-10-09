@@ -1,0 +1,1338 @@
+import { useEffect, useMemo, useState, type FormEvent, type ReactNode } from 'react'
+import {
+  ArrowDownRight, ArrowRight, BookOpen, CalendarDays, Check, CheckCircle2,
+  Clock3, Flame, GraduationCap, LayoutDashboard, ListTodo, LogOut, Menu,
+  Plus, Search, Send, Sparkles, Target, Timer, Trash2, X,
+  PanelLeftClose, PanelLeftOpen, Play, Pause, RotateCcw,
+} from 'lucide-react'
+
+type Task = {
+  id: string
+  name: string
+  subject?: string
+  due?: string
+  done?: boolean
+  priority?: string
+}
+
+type Subject = { id: string; name: string; color?: string }
+type EventItem = { id: string; name: string; date: string }
+type User = { name: string; email: string }
+type Page =
+  | 'Visão geral'
+  | 'Tarefas'
+  | 'Calendário'
+  | 'Matérias'
+  | 'Pomodoro'
+  | 'StudyFlow AI'
+
+const nav: { label: Page; icon: typeof LayoutDashboard }[] = [
+  { label: 'Visão geral', icon: LayoutDashboard },
+  { label: 'Tarefas', icon: CheckCircle2 },
+  { label: 'Calendário', icon: CalendarDays },
+  { label: 'Matérias', icon: BookOpen },
+  { label: 'Pomodoro', icon: Timer },
+  { label: 'StudyFlow AI', icon: Sparkles },
+]
+
+const read = <T,>(key: string, fallback: T): T => {
+  try {
+    const value = localStorage.getItem(key)
+    return value ? (JSON.parse(value) as T) : fallback
+  } catch {
+    return fallback
+  }
+}
+
+const save = (key: string, value: unknown) =>
+  localStorage.setItem(key, JSON.stringify(value))
+
+const uid = () => crypto.randomUUID()
+const welcomeName = (name: string) => name.trim().split(/\s+/)[0] || 'estudante'
+
+const dateLabel = new Intl.DateTimeFormat('pt-BR', {
+  weekday: 'long',
+  day: 'numeric',
+  month: 'long',
+}).format(new Date())
+
+export default function App() {
+  const [user, setUser] = useState<User | null>(() => read('usuarioStudyFlow', null))
+  const [page, setPage] = useState<Page>('Visão geral')
+  const [tasks, setTasks] = useState<Task[]>(() =>
+    read<(Task & { nome?: string })[]>('tarefasStudyFlow', []).map(task => ({
+      ...task,
+      id: task.id || uid(),
+      name: task.name || task.nome || 'Tarefa sem título',
+      done: task.done || false,
+    })),
+  )
+  const [subjects, setSubjects] = useState<Subject[]>(() =>
+    read<(Subject & { nome?: string })[]>('materiasStudyFlow', []).map(subject => ({
+      ...subject,
+      id: subject.id || uid(),
+      name: subject.name || subject.nome || 'Matéria',
+    })),
+  )
+  const [events, setEvents] = useState<EventItem[]>(() =>
+    read<(EventItem & { nome?: string; dia?: string })[]>('eventosStudyFlow', []).map(event => {
+      const day = Number(event.dia)
+      const today = new Date()
+      const legacyDate =
+        day > 0 && day <= 31
+          ? `${today.getFullYear()}-${String(today.getMonth() + 1).padStart(2, '0')}-${String(day).padStart(2, '0')}`
+          : ''
+      return {
+        ...event,
+        id: event.id || uid(),
+        name: event.name || event.nome || 'Evento',
+        date: event.date || legacyDate || new Date().toISOString().slice(0, 10),
+      }
+    }),
+  )
+
+  const [modal, setModal] = useState<'task' | 'subject' | 'event' | null>(null)
+  const [mobileOpen, setMobileOpen] = useState(false)
+  const [collapsed, setCollapsed] = useState(() =>
+    read('studyflowSidebarCollapsed', true),
+  )
+  const [query, setQuery] = useState('')
+
+  useEffect(() => save('tarefasStudyFlow', tasks), [tasks])
+  useEffect(() => save('materiasStudyFlow', subjects), [subjects])
+  useEffect(() => save('eventosStudyFlow', events), [events])
+
+  useEffect(() => {
+    if (!mobileOpen) return
+
+    const closeOnEscape = (event: KeyboardEvent) => {
+      if (event.key === 'Escape') setMobileOpen(false)
+    }
+
+    window.addEventListener('keydown', closeOnEscape)
+    return () => window.removeEventListener('keydown', closeOnEscape)
+  }, [mobileOpen])
+
+  const completed = tasks.filter(task => task.done).length
+  const filteredTasks = useMemo(
+    () =>
+      tasks.filter(task =>
+        `${task.name} ${task.subject || ''}`.toLowerCase().includes(query.toLowerCase()),
+      ),
+    [tasks, query],
+  )
+
+  const switchPage = (nextPage: Page) => {
+    setPage(nextPage)
+    setMobileOpen(false)
+  }
+
+  const toggleSidebar = () => {
+    setCollapsed(current => {
+      const next = !current
+      save('studyflowSidebarCollapsed', next)
+      return next
+    })
+  }
+
+  const signIn = (event: FormEvent<HTMLFormElement>) => {
+    event.preventDefault()
+    const data = new FormData(event.currentTarget)
+    const email = String(data.get('email'))
+    const enteredName = String(data.get('name') || email || 'Estudante')
+    const profile = { name: enteredName.split('@')[0], email }
+
+    setUser(profile)
+    save('usuarioStudyFlow', profile)
+    localStorage.setItem('usuarioLogado', 'true')
+  }
+
+  const signOut = () => {
+    setUser(null)
+    localStorage.removeItem('usuarioStudyFlow')
+    localStorage.removeItem('usuarioLogado')
+  }
+
+  if (!user) return <Auth onSubmit={signIn} />
+
+  return (
+    <div className="app-shell">
+      {mobileOpen && (
+        <button
+          className="scrim"
+          aria-label="Fechar menu"
+          onClick={() => setMobileOpen(false)}
+        />
+      )}
+
+      <aside
+        id="studyflow-sidebar"
+        className={`sidebar ${collapsed ? 'sidebar-collapsed' : ''} ${mobileOpen ? 'sidebar-open' : ''}`}
+      >
+        <div className="sidebar-brand-row">
+          <a
+            className="brand"
+            href="#inicio"
+            title="StudyFlow"
+            onClick={event => {
+              event.preventDefault()
+              switchPage('Visão geral')
+            }}
+          >
+            <img className="brand-full" src="/studyflow-logo.png" alt="StudyFlow" />
+            <img className="brand-mark-img" src="/studyflow-mark.png" alt="" />
+          </a>
+        </div>
+
+        <div className="workspace-label">ESPAÇO DE ESTUDOS</div>
+
+        <nav className="nav-list" aria-label="Navegação principal">
+          {nav.map(({ label, icon: Icon }) => (
+            <button
+              key={label}
+              title={label}
+              className={`nav-item ${page === label ? 'active' : ''}`}
+              aria-current={page === label ? 'page' : undefined}
+              onClick={() => switchPage(label)}
+            >
+              <Icon size={19} strokeWidth={1.8} />
+              <span>{label}</span>
+              {label === 'StudyFlow AI' && <span className="nav-new">IA</span>}
+            </button>
+          ))}
+        </nav>
+
+        <div className="sidebar-spacer" />
+
+        <div className="sidebar-focus">
+          <div className="focus-icon"><Target size={18} /></div>
+          <div>
+            <b>Seu foco da semana</b>
+            <p>{completed} de {tasks.length || 5} tarefas concluídas</p>
+          </div>
+          <div className="focus-track">
+            <span style={{ width: `${tasks.length ? (completed / tasks.length) * 100 : 0}%` }} />
+          </div>
+        </div>
+
+        <button className="profile-row" onClick={signOut} title="Sair">
+          <span className="avatar">{welcomeName(user.name).slice(0, 1).toUpperCase()}</span>
+          <span className="profile-copy">
+            <b>{user.name}</b>
+            <small>Plano de estudos</small>
+          </span>
+          <LogOut size={16} />
+        </button>
+      </aside>
+
+      <main className={`main-area ${collapsed ? 'main-collapsed' : ''}`}>
+        <header className="topbar">
+          <button
+            className="icon-button mobile-menu"
+            onClick={() => setMobileOpen(true)}
+            aria-label={mobileOpen ? 'Fechar menu' : 'Abrir menu'}
+            aria-expanded={mobileOpen}
+            aria-controls="studyflow-sidebar"
+          >
+            <Menu size={20} />
+          </button>
+
+          <button
+            className="icon-button desktop-toggle"
+            onClick={toggleSidebar}
+            aria-label={collapsed ? 'Expandir menu' : 'Recolher menu'}
+            aria-expanded={!collapsed}
+            aria-controls="studyflow-sidebar"
+            title={collapsed ? 'Expandir menu' : 'Recolher menu'}
+          >
+            {collapsed ? <PanelLeftOpen size={19} /> : <PanelLeftClose size={19} />}
+          </button>
+
+          <div className="breadcrumb">
+            Meu espaço <span>/</span> <b>{page}</b>
+          </div>
+
+          <div className="top-actions">
+            <span className="today-date">{dateLabel}</span>
+            <button className="user-avatar" aria-label="Perfil">
+              {welcomeName(user.name).slice(0, 1).toUpperCase()}
+            </button>
+          </div>
+        </header>
+
+        <div className="content-wrap">
+          {page === 'Visão geral' && (
+            <Dashboard
+              user={user}
+              tasks={tasks}
+              subjects={subjects}
+              events={events}
+              completed={completed}
+              onNavigate={switchPage}
+              onAdd={() => setModal('task')}
+              onToggle={id =>
+                setTasks(current =>
+                  current.map(task => task.id === id ? { ...task, done: !task.done } : task),
+                )
+              }
+            />
+          )}
+
+          {page === 'Tarefas' && (
+            <TasksPage
+              tasks={filteredTasks}
+              query={query}
+              setQuery={setQuery}
+              onAdd={() => setModal('task')}
+              onToggle={id =>
+                setTasks(current =>
+                  current.map(task => task.id === id ? { ...task, done: !task.done } : task),
+                )
+              }
+              onDelete={id =>
+                setTasks(current => current.filter(task => task.id !== id))
+              }
+            />
+          )}
+
+          {page === 'Matérias' && (
+            <SubjectsPage
+              subjects={subjects}
+              onAdd={() => setModal('subject')}
+              onDelete={id =>
+                setSubjects(current => current.filter(subject => subject.id !== id))
+              }
+            />
+          )}
+
+          {page === 'Calendário' && (
+            <CalendarPage
+              events={events}
+              onAdd={() => setModal('event')}
+              onDelete={id =>
+                setEvents(current => current.filter(item => item.id !== id))
+              }
+            />
+          )}
+
+          {page === 'Pomodoro' && <Pomodoro />}
+          {page === 'StudyFlow AI' && <AiPage />}
+        </div>
+      </main>
+
+      {modal && (
+        <EntryModal
+          kind={modal}
+          subjects={subjects}
+          onClose={() => setModal(null)}
+          onSave={data => {
+            if (modal === 'task') {
+              setTasks(current => [
+                {
+                  id: uid(),
+                  name: data.name,
+                  subject: data.subject,
+                  due: data.date,
+                  priority: data.priority,
+                  done: false,
+                },
+                ...current,
+              ])
+            }
+
+            if (modal === 'subject') {
+              setSubjects(current => [
+                { id: uid(), name: data.name, color: data.color },
+                ...current,
+              ])
+            }
+
+            if (modal === 'event') {
+              setEvents(current => [
+                {
+                  id: uid(),
+                  name: data.name,
+                  date: data.date || new Date().toISOString().slice(0, 10),
+                },
+                ...current,
+              ])
+            }
+
+            setModal(null)
+          }}
+        />
+      )}
+    </div>
+  )
+}
+
+function Auth({ onSubmit }: { onSubmit: (event: FormEvent<HTMLFormElement>) => void }) {
+  const [register, setRegister] = useState(false)
+
+  return (
+    <div className="auth-page">
+<div className="auth-card">
+        <div className="auth-kicker"><Sparkles size={15} /> APRENDA NO SEU RITMO</div>
+        <h1>{register ? 'Comece sua jornada.' : 'Seu próximo passo começa aqui.'}</h1>
+        <p className="muted">
+          Organize sua rotina e transforme seus objetivos em progresso real.
+        </p>
+
+        <form onSubmit={onSubmit} className="auth-form">
+          {register && (
+            <label>
+              Seu nome
+              <input name="name" placeholder="Como podemos te chamar?" required />
+            </label>
+          )}
+          <label>
+            E-mail
+            <input type="email" name="email" placeholder="voce@exemplo.com" required />
+          </label>
+          <label>
+            Senha
+            <input
+              type="password"
+              name="password"
+              placeholder="Mínimo de 6 caracteres"
+              minLength={6}
+              required
+            />
+          </label>
+          <button className="primary-button full-button">
+            {register ? 'Criar minha conta' : 'Entrar na minha conta'}
+            <ArrowRight size={17} />
+          </button>
+        </form>
+
+        <p className="auth-switch">
+          {register ? 'Já tem uma conta?' : 'Ainda não tem uma conta?'}{' '}
+          <button onClick={() => setRegister(!register)}>
+            {register ? 'Fazer login' : 'Criar conta'}
+          </button>
+        </p>
+
+        <div className="auth-note"><Check size={14} /> Seus dados ficam salvos neste dispositivo</div>
+      </div>
+
+      <span className="auth-footer">STUDYFLOW · FOCO NO QUE IMPORTA</span>
+    </div>
+  )
+}
+
+function Dashboard({
+  user,
+  tasks,
+  subjects,
+  events,
+  completed,
+  onNavigate,
+  onAdd,
+  onToggle,
+}: {
+  user: User
+  tasks: Task[]
+  subjects: Subject[]
+  events: EventItem[]
+  completed: number
+  onNavigate: (page: Page) => void
+  onAdd: () => void
+  onToggle: (id: string) => void
+}) {
+  const today = new Date().toISOString().slice(0, 10)
+  const upcoming = events
+    .filter(event => event.date >= today)
+    .sort((a, b) => a.date.localeCompare(b.date))[0]
+
+  const progress = tasks.length
+    ? Math.round((completed / tasks.length) * 100)
+    : 0
+
+  return (
+    <>
+      <div className="welcome-row">
+        <div className="hero-copy">
+          <div className="hero-kicker">
+            <span className="hero-kicker-dot" />
+            <span>{dateLabel}</span>
+          </div>
+
+          <h1>
+            Olá, {welcomeName(user.name)}
+            <br />
+            <span>vamos avançar hoje?</span>
+          </h1>
+
+          <p>Um passo de cada vez. Organize suas prioridades e continue no seu ritmo.</p>
+
+          <button className="primary-button hero-button" onClick={onAdd}>
+            <Plus size={17} /> Nova tarefa <ArrowRight size={16} />
+          </button>
+        </div>
+
+        <div className="hero-progress-card">
+          <div
+            className="hero-progress-ring"
+            style={{ '--progress': `${progress}%` } as React.CSSProperties}
+          >
+            <div className="hero-progress-center">
+              <Target size={19} />
+              <strong>{progress}%</strong>
+              <small>concluído</small>
+            </div>
+          </div>
+
+          <div className="hero-progress-copy">
+            <b>Seu progresso</b>
+            <span>{completed} de {tasks.length} tarefas concluídas</span>
+          </div>
+        </div>
+      </div>
+
+      <section className="stats-grid">
+        <Stat
+          icon={<CheckCircle2 size={18} />}
+          tint="blue"
+          label="Tarefas concluídas"
+          value={`${completed}/${tasks.length}`}
+          detail="do seu planejamento"
+        />
+        <Stat
+          icon={<BookOpen size={18} />}
+          tint="violet"
+          label="Matérias ativas"
+          value={String(subjects.length).padStart(2, '0')}
+          detail="no seu espaço de estudo"
+        />
+        <Stat
+          icon={<Flame size={18} />}
+          tint="orange"
+          label="Sequência de estudos"
+          value="3 dias"
+          detail="continue nesse ritmo"
+        />
+        <Stat
+          icon={<ListTodo size={18} />}
+          tint="cyan"
+          label="Tarefas em aberto"
+          value={String(tasks.length - completed).padStart(2, '0')}
+          detail="próximos passos do seu plano"
+        />
+      </section>
+
+      <section className="dashboard-grid">
+        <div className="panel task-panel">
+          <div className="panel-heading">
+            <div>
+              <h2>Suas tarefas</h2>
+              <p>O que merece sua atenção hoje</p>
+            </div>
+            <button className="text-button" onClick={() => onNavigate('Tarefas')}>
+              Ver todas <ArrowRight size={15} />
+            </button>
+          </div>
+
+          {tasks.length === 0 ? (
+            <Empty
+              icon={<CheckCircle2 />}
+              title="Tudo começa com um plano"
+              text="Adicione sua primeira tarefa para organizar os estudos."
+              action="Criar tarefa"
+              onAction={onAdd}
+            />
+          ) : (
+            <div className="task-list">
+              {tasks.slice(0, 5).map(task => (
+                <TaskRow
+                  key={task.id}
+                  task={task}
+                  onToggle={() => onToggle(task.id)}
+                />
+              ))}
+            </div>
+          )}
+        </div>
+
+        <div className="right-stack">
+          <div className="panel focus-panel">
+            <div className="panel-heading">
+              <div>
+                <h2>Próximo compromisso</h2>
+                <p>Fique de olho no que vem aí</p>
+              </div>
+              <CalendarDays className="subtle-icon" size={18} />
+            </div>
+
+            {upcoming ? (
+              <div className="event-preview">
+                <span className="event-date">
+                  <b>{new Date(`${upcoming.date}T12:00:00`).getDate()}</b>
+                  <small>
+                    {new Intl.DateTimeFormat('pt-BR', { month: 'short' })
+                      .format(new Date(`${upcoming.date}T12:00:00`))
+                      .replace('.', '')}
+                  </small>
+                </span>
+                <div>
+                  <b>{upcoming.name}</b>
+                  <small>
+                    {new Intl.DateTimeFormat('pt-BR', {
+                      weekday: 'long',
+                      day: 'numeric',
+                      month: 'long',
+                    }).format(new Date(`${upcoming.date}T12:00:00`))}
+                  </small>
+                </div>
+              </div>
+            ) : (
+              <Empty
+                icon={<CalendarDays />}
+                title="Agenda livre por enquanto"
+                text="Coloque suas próximas provas e entregas no calendário."
+                action="Adicionar evento"
+                onAction={() => onNavigate('Calendário')}
+              />
+            )}
+          </div>
+
+          <div className="ai-promo">
+            <div className="ai-orb"><Sparkles size={19} /></div>
+            <div>
+              <b>Uma dúvida no caminho?</b>
+              <p>Estude com apoio do StudyFlow AI.</p>
+            </div>
+            <button
+              className="circle-arrow"
+              aria-label="Abrir StudyFlow AI"
+              onClick={() => onNavigate('StudyFlow AI')}
+            >
+              <ArrowRight size={17} />
+            </button>
+          </div>
+        </div>
+      </section>
+
+      <section className="panel subjects-panel">
+        <div className="panel-heading">
+          <div>
+            <h2>Seu espaço de estudo</h2>
+            <p>Matérias que fazem parte da sua jornada</p>
+          </div>
+          <button className="text-button" onClick={() => onNavigate('Matérias')}>
+            Ver matérias <ArrowRight size={15} />
+          </button>
+        </div>
+
+        {subjects.length ? (
+          <div className="subject-chips">
+            {subjects.slice(0, 6).map((subject, index) => (
+              <div className={`subject-chip color-${index % 4}`} key={subject.id}>
+                <span className="subject-dot" />
+                {subject.name}
+              </div>
+            ))}
+          </div>
+        ) : (
+          <p className="empty-inline">
+            Ainda não há matérias cadastradas.{' '}
+            <button onClick={() => onNavigate('Matérias')}>Adicionar uma matéria</button>
+          </p>
+        )}
+      </section>
+
+      <section className="quick-actions-grid">
+        <button
+          className="quick-action-card focus-quick"
+          onClick={() => onNavigate('Pomodoro')}
+        >
+          <span className="quick-icon"><Clock3 size={21} /></span>
+          <span className="quick-copy">
+            <small>HORA DE CONCENTRAR</small>
+            <b>Comece uma sessão de foco</b>
+            <span>Reserve um tempo para avançar nos seus estudos.</span>
+          </span>
+          <span className="quick-arrow"><ArrowRight size={18} /></span>
+        </button>
+
+        <button
+          className="quick-action-card calendar-quick"
+          onClick={() => onNavigate('Calendário')}
+        >
+          <span className="quick-icon"><CalendarDays size={21} /></span>
+          <span className="quick-copy">
+            <small>SEU PRÓXIMO PASSO</small>
+            <b>Organize sua semana</b>
+            <span>Consulte provas, entregas e compromissos.</span>
+          </span>
+          <span className="quick-arrow"><ArrowRight size={18} /></span>
+        </button>
+      </section>
+
+      <footer className="page-footer">
+        Feito para aprender com mais leveza <span>·</span> StudyFlow
+      </footer>
+    </>
+  )
+}
+
+function Stat({
+  icon,
+  tint,
+  label,
+  value,
+  detail,
+}: {
+  icon: ReactNode
+  tint: string
+  label: string
+  value: string
+  detail: string
+}) {
+  return (
+    <div className="stat-card">
+      <div className={`stat-icon ${tint}`}>{icon}</div>
+      <div className="stat-label">{label}</div>
+      <div className="stat-value">{value}</div>
+      <div className="stat-detail">{detail}</div>
+    </div>
+  )
+}
+
+function TaskRow({
+  task,
+  onToggle,
+  onDelete,
+}: {
+  task: Task
+  onToggle: () => void
+  onDelete?: () => void
+}) {
+  return (
+    <div className={`task-row ${task.done ? 'task-done' : ''}`}>
+      <button
+        className={`task-check ${task.done ? 'checked' : ''}`}
+        onClick={onToggle}
+        aria-label={task.done ? 'Reabrir tarefa' : 'Concluir tarefa'}
+      >
+        {task.done && <Check size={13} />}
+      </button>
+      <div className="task-copy">
+        <b>{task.name}</b>
+        <small>
+          {task.subject || 'Estudo'}
+          {task.due
+            ? ` · ${new Intl.DateTimeFormat('pt-BR', {
+                day: 'numeric',
+                month: 'short',
+              }).format(new Date(`${task.due}T12:00:00`))}`
+            : ''}
+        </small>
+      </div>
+      <span
+        className={`priority ${
+          task.priority === 'Alta'
+            ? 'priority-high'
+            : task.priority === 'Baixa'
+              ? 'priority-low'
+              : ''
+        }`}
+      >
+        <i />
+        {task.priority || 'Normal'}
+      </span>
+      {onDelete && (
+        <button
+          className="delete-button"
+          onClick={onDelete}
+          aria-label="Excluir tarefa"
+        >
+          <Trash2 size={16} />
+        </button>
+      )}
+    </div>
+  )
+}
+
+function Empty({
+  icon,
+  title,
+  text,
+  action,
+  onAction,
+}: {
+  icon: ReactNode
+  title: string
+  text: string
+  action: string
+  onAction: () => void
+}) {
+  return (
+    <div className="empty-state">
+      <div className="empty-icon">{icon}</div>
+      <b>{title}</b>
+      <p>{text}</p>
+      <button className="text-button" onClick={onAction}>
+        {action} <ArrowRight size={14} />
+      </button>
+    </div>
+  )
+}
+
+function PageHeader({
+  eyebrow,
+  title,
+  description,
+  action,
+}: {
+  eyebrow: string
+  title: string
+  description: string
+  action?: ReactNode
+}) {
+  return (
+    <div className="page-header">
+      <div>
+        <div className="eyebrow">{eyebrow}</div>
+        <h1>{title}</h1>
+        <p className="muted">{description}</p>
+      </div>
+      {action}
+    </div>
+  )
+}
+
+function TasksPage({
+  tasks,
+  query,
+  setQuery,
+  onAdd,
+  onToggle,
+  onDelete,
+}: {
+  tasks: Task[]
+  query: string
+  setQuery: (value: string) => void
+  onAdd: () => void
+  onToggle: (id: string) => void
+  onDelete: (id: string) => void
+}) {
+  return (
+    <>
+      <PageHeader
+        eyebrow="SEU PLANO, NO SEU RITMO"
+        title="Tarefas"
+        description="Organize o que você quer conquistar."
+        action={
+          <button className="primary-button" onClick={onAdd}>
+            <Plus size={17} /> Nova tarefa
+          </button>
+        }
+      />
+
+      <div className="panel page-panel">
+        <div className="list-toolbar">
+          <div>
+            <h2>Lista de tarefas</h2>
+            <p>
+              {tasks.length} {tasks.length === 1 ? 'item' : 'itens'} no seu planejamento
+            </p>
+          </div>
+          <label className="search-box">
+            <Search size={16} />
+            <input
+              placeholder="Buscar tarefa"
+              value={query}
+              onChange={event => setQuery(event.target.value)}
+            />
+          </label>
+        </div>
+
+        {tasks.length ? (
+          <div className="task-list">
+            {tasks.map(task => (
+              <TaskRow
+                key={task.id}
+                task={task}
+                onToggle={() => onToggle(task.id)}
+                onDelete={() => onDelete(task.id)}
+              />
+            ))}
+          </div>
+        ) : (
+          <Empty
+            icon={<CheckCircle2 />}
+            title={query ? 'Nenhum resultado encontrado' : 'Sua lista está pronta para começar'}
+            text={
+              query
+                ? 'Tente buscar por outro termo.'
+                : 'Crie uma tarefa e tenha clareza sobre seu próximo passo.'
+            }
+            action={query ? 'Limpar busca' : 'Criar tarefa'}
+            onAction={query ? () => setQuery('') : onAdd}
+          />
+        )}
+      </div>
+    </>
+  )
+}
+
+function SubjectsPage({
+  subjects,
+  onAdd,
+  onDelete,
+}: {
+  subjects: Subject[]
+  onAdd: () => void
+  onDelete: (id: string) => void
+}) {
+  return (
+    <>
+      <PageHeader
+        eyebrow="APRENDIZADO ORGANIZADO"
+        title="Matérias"
+        description="Reúna seus conteúdos em um só lugar."
+        action={
+          <button className="primary-button" onClick={onAdd}>
+            <Plus size={17} /> Nova matéria
+          </button>
+        }
+      />
+
+      {subjects.length ? (
+        <div className="subject-grid">
+          {subjects.map((subject, index) => (
+            <article className="panel subject-card" key={subject.id}>
+              <div className={`subject-art color-${index % 4}`}>
+                <BookOpen size={22} />
+                <button
+                  className="delete-button"
+                  onClick={() => onDelete(subject.id)}
+                  aria-label={`Excluir ${subject.name}`}
+                >
+                  <Trash2 size={16} />
+                </button>
+              </div>
+              <h2>{subject.name}</h2>
+              <p>Uma matéria por vez. Um passo de cada vez.</p>
+              <div className="subject-progress">
+                <span style={{ width: '28%' }} />
+              </div>
+              <small>Seu espaço de aprendizado</small>
+            </article>
+          ))}
+        </div>
+      ) : (
+        <div className="panel page-panel">
+          <Empty
+            icon={<BookOpen />}
+            title="Seu conhecimento começa aqui"
+            text="Adicione as matérias que você está estudando para manter tudo organizado."
+            action="Adicionar matéria"
+            onAction={onAdd}
+          />
+        </div>
+      )}
+    </>
+  )
+}
+
+function CalendarPage({
+  events,
+  onAdd,
+  onDelete,
+}: {
+  events: EventItem[]
+  onAdd: () => void
+  onDelete: (id: string) => void
+}) {
+  const sorted = [...events].sort((a, b) => a.date.localeCompare(b.date))
+
+  return (
+    <>
+      <PageHeader
+        eyebrow="OLHE PARA FRENTE"
+        title="Calendário"
+        description="Provas, entregas e momentos importantes."
+        action={
+          <button className="primary-button" onClick={onAdd}>
+            <Plus size={17} /> Novo evento
+          </button>
+        }
+      />
+
+      <div className="panel page-panel">
+        <div className="list-toolbar">
+          <div>
+            <h2>Próximos eventos</h2>
+            <p>Não deixe um prazo importante passar.</p>
+          </div>
+          <CalendarDays size={20} className="subtle-icon" />
+        </div>
+
+        {sorted.length ? (
+          <div className="event-list">
+            {sorted.map(event => (
+              <div className="event-row" key={event.id}>
+                <span className="event-date">
+                  <b>{new Date(`${event.date}T12:00:00`).getDate()}</b>
+                  <small>
+                    {new Intl.DateTimeFormat('pt-BR', { month: 'short' })
+                      .format(new Date(`${event.date}T12:00:00`))
+                      .replace('.', '')}
+                  </small>
+                </span>
+                <div className="task-copy">
+                  <b>{event.name}</b>
+                  <small>
+                    {new Intl.DateTimeFormat('pt-BR', {
+                      weekday: 'long',
+                      day: 'numeric',
+                      month: 'long',
+                      year: 'numeric',
+                    }).format(new Date(`${event.date}T12:00:00`))}
+                  </small>
+                </div>
+                <button
+                  className="delete-button"
+                  onClick={() => onDelete(event.id)}
+                  aria-label="Excluir evento"
+                >
+                  <Trash2 size={16} />
+                </button>
+              </div>
+            ))}
+          </div>
+        ) : (
+          <Empty
+            icon={<CalendarDays />}
+            title="Seu calendário está livre"
+            text="Adicione uma prova, entrega ou sessão de estudos."
+            action="Adicionar evento"
+            onAction={onAdd}
+          />
+        )}
+      </div>
+    </>
+  )
+}
+
+function Pomodoro() {
+  const [seconds, setSeconds] = useState(25 * 60)
+  const [running, setRunning] = useState(false)
+  const [mode, setMode] = useState<'Foco' | 'Pausa curta' | 'Pausa longa'>('Foco')
+
+  useEffect(() => {
+    if (!running) return
+
+    const timer = window.setInterval(() => {
+      setSeconds(current => {
+        if (current <= 1) {
+          setRunning(false)
+          return 0
+        }
+        return current - 1
+      })
+    }, 1000)
+
+    return () => window.clearInterval(timer)
+  }, [running])
+
+  const changeMode = (nextMode: typeof mode) => {
+    setMode(nextMode)
+    setRunning(false)
+    setSeconds(
+      nextMode === 'Foco'
+        ? 25 * 60
+        : nextMode === 'Pausa curta'
+          ? 5 * 60
+          : 15 * 60,
+    )
+  }
+
+  const totalSeconds =
+    mode === 'Foco' ? 1500 : mode === 'Pausa curta' ? 300 : 900
+  const progress = 1 - seconds / totalSeconds
+
+  return (
+    <>
+      <PageHeader
+        eyebrow="TEMPO DE QUALIDADE"
+        title="Pomodoro"
+        description="Faça pausas intencionais. Proteja seu foco."
+      />
+
+      <div className="panel pomodoro-panel">
+        <div className="timer-tabs">
+          {(['Foco', 'Pausa curta', 'Pausa longa'] as const).map(item => (
+            <button
+              key={item}
+              className={mode === item ? 'selected' : ''}
+              onClick={() => changeMode(item)}
+            >
+              {item}
+            </button>
+          ))}
+        </div>
+
+        <div
+          className={`timer-face ${running ? 'timer-running' : ''}`}
+          style={{ '--progress': `${progress * 100}%` } as React.CSSProperties}
+        >
+          <div className="timer-inner">
+            <span>
+              {String(Math.floor(seconds / 60)).padStart(2, '0')}:
+              {String(seconds % 60).padStart(2, '0')}
+            </span>
+            <small>{running ? 'VOCÊ ESTÁ NO FLUXO' : 'UM PASSO DE CADA VEZ'}</small>
+          </div>
+        </div>
+
+        <div className="timer-controls">
+          <button
+            className="primary-button"
+            onClick={() => setRunning(true)}
+            disabled={running}
+          >
+            <Play size={16} /> Iniciar
+          </button>
+          <button
+            className="secondary-button"
+            onClick={() => setRunning(false)}
+            disabled={!running}
+          >
+            <Pause size={16} /> Pausar
+          </button>
+          <button
+            className="timer-reset-button"
+            onClick={() => {
+              setRunning(false)
+              setSeconds(totalSeconds)
+            }}
+          >
+            <RotateCcw size={16} /> Reiniciar
+          </button>
+        </div>
+
+        <p className="timer-hint">
+          <Clock3 size={15} /> 25 minutos de foco · 5 minutos de pausa
+        </p>
+      </div>
+    </>
+  )
+}
+
+function AiPage() {
+  const [question, setQuestion] = useState('')
+  const [answer, setAnswer] = useState('')
+  const [loading, setLoading] = useState(false)
+  const [error, setError] = useState('')
+
+  const ask = async (event: FormEvent<HTMLFormElement>) => {
+    event.preventDefault()
+    if (!question.trim()) return
+
+    setLoading(true)
+    setError('')
+    setAnswer('')
+
+    try {
+      const response = await fetch('/api/ia', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ pergunta: question }),
+      })
+      const data = await response.json()
+
+      if (!response.ok) {
+        throw new Error(data.erro || 'Não foi possível obter uma resposta.')
+      }
+
+      setAnswer(data.resposta)
+    } catch {
+      setError(
+        'Não conseguimos acessar o assistente. Confira se o servidor da IA está ativo e tente novamente.',
+      )
+    } finally {
+      setLoading(false)
+    }
+  }
+
+  return (
+    <>
+      <PageHeader
+        eyebrow="APRENDER TAMBÉM É PERGUNTAR"
+        title="StudyFlow AI"
+        description="Uma ajuda para destravar sua próxima descoberta."
+      />
+
+      <div className="panel ai-panel">
+        <div className="ai-welcome">
+          <div className="ai-big-icon"><Sparkles size={24} /></div>
+          <h2>Em que posso te ajudar?</h2>
+          <p>
+            Converse sobre um conteúdo, peça um exemplo ou entenda um exercício
+            passo a passo.
+          </p>
+        </div>
+
+        <div className="suggestions">
+          <button onClick={() => setQuestion('Explique fotossíntese de um jeito simples')}>
+            Explique um conteúdo <ArrowRight size={14} />
+          </button>
+          <button onClick={() => setQuestion('Como posso organizar meus estudos para uma prova?')}>
+            Organize meus estudos <ArrowRight size={14} />
+          </button>
+          <button onClick={() => setQuestion('Me ajude a resolver uma equação do segundo grau')}>
+            Resolva um exercício <ArrowRight size={14} />
+          </button>
+        </div>
+
+        {answer && (
+          <div className="ai-answer">
+            <div className="answer-avatar"><Sparkles size={15} /></div>
+            <div><b>StudyFlow AI</b><p>{answer}</p></div>
+          </div>
+        )}
+
+        {error && <div className="error-note">{error}</div>}
+
+        <form className="ai-input" onSubmit={ask}>
+          <textarea
+            value={question}
+            onChange={event => setQuestion(event.target.value)}
+            placeholder="Escreva sua pergunta..."
+            rows={2}
+          />
+          <button
+            className="send-button"
+            disabled={loading || !question.trim()}
+            aria-label="Enviar pergunta"
+          >
+            {loading ? <span className="spinner" /> : <Send size={17} />}
+          </button>
+        </form>
+
+        <p className="ai-disclaimer">
+          A IA pode cometer erros. Confira informações importantes com seus materiais de estudo.
+        </p>
+      </div>
+    </>
+  )
+}
+
+function EntryModal({
+  kind,
+  subjects,
+  onClose,
+  onSave,
+}: {
+  kind: 'task' | 'subject' | 'event'
+  subjects: Subject[]
+  onClose: () => void
+  onSave: (data: {
+    name: string
+    date?: string
+    subject?: string
+    priority?: string
+    color?: string
+  }) => void
+}) {
+  const isTask = kind === 'task'
+  const isEvent = kind === 'event'
+  const title = isTask ? 'Nova tarefa' : isEvent ? 'Novo evento' : 'Nova matéria'
+
+  const submit = (event: FormEvent<HTMLFormElement>) => {
+    event.preventDefault()
+    const data = new FormData(event.currentTarget)
+
+    onSave({
+      name: String(data.get('name')),
+      date: String(data.get('date') || ''),
+      subject: String(data.get('subject') || ''),
+      priority: String(data.get('priority') || 'Normal'),
+      color: String(data.get('color') || 'blue'),
+    })
+  }
+
+  return (
+    <div
+      className="modal-backdrop"
+      onMouseDown={event => {
+        if (event.target === event.currentTarget) onClose()
+      }}
+    >
+      <form className="modal-card" onSubmit={submit}>
+        <div className="modal-heading">
+          <div>
+            <div className="eyebrow">ORGANIZE SEU PRÓXIMO PASSO</div>
+            <h2>{title}</h2>
+          </div>
+          <button
+            type="button"
+            className="icon-button"
+            onClick={onClose}
+            aria-label="Fechar"
+          >
+            <X size={19} />
+          </button>
+        </div>
+
+        <label>
+          Nome
+          <input
+            name="name"
+            autoFocus
+            placeholder={
+              isTask
+                ? 'Ex.: Revisar capítulo 3'
+                : isEvent
+                  ? 'Ex.: Prova de matemática'
+                  : 'Ex.: Matemática'
+            }
+            required
+            maxLength={90}
+          />
+        </label>
+
+        {isTask && (
+          <label>
+            Matéria
+            <select name="subject">
+              <option value="">Sem matéria definida</option>
+              {subjects.map(subject => (
+                <option key={subject.id}>{subject.name}</option>
+              ))}
+            </select>
+          </label>
+        )}
+
+        {(isTask || isEvent) && (
+          <label>
+            {isTask ? 'Prazo' : 'Data'}
+            <input name="date" type="date" required={isEvent} />
+          </label>
+        )}
+
+        {isTask && (
+          <label>
+            Prioridade
+            <select name="priority">
+              <option>Normal</option>
+              <option>Alta</option>
+              <option>Baixa</option>
+            </select>
+          </label>
+        )}
+
+        <div className="modal-actions">
+          <button type="button" className="secondary-button" onClick={onClose}>
+            Cancelar
+          </button>
+          <button className="primary-button">
+            <Plus size={16} /> Adicionar
+          </button>
+        </div>
+      </form>
+    </div>
+  )
+}

@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Login | StudyFlow</title>
+
+  <script src="https://cdn.tailwindcss.com"></script>
+</head>
+
+<body class="min-h-screen bg-gradient-to-br from-slate-950 via-slate-900 to-slate-950 flex items-center justify-center overflow-x-hidden text-white font-sans p-4">
+
+  <!-- Glow -->
+  <div class="absolute top-0 left-0 w-96 h-96 bg-blue-500/20 blur-3xl rounded-full"></div>
+  <div class="absolute bottom-0 right-0 w-96 h-96 bg-cyan-500/20 blur-3xl rounded-full"></div>
+
+  <!-- Card -->
+  <div class="relative z-10 w-full max-w-md sm:max-w-lg bg-white/5 backdrop-blur-2xl border border-white/10 rounded-[32px] p-6 md:p-8 shadow-2xl shadow-blue-500/10">
+
+    <!-- Logo -->
+    <div class="flex flex-col items-center mb-10">
+
+      <img
+  src="../assets/StudyFlow.png"
+  alt="StudyFlow"
+  class="w-48 h-48 object-contain mb-4"
+/>
+
+
+      <p class="text-slate-400 mt-2 text-center">
+        Organize seus estudos de forma inteligente.
+      </p>
+    </div>
+
+    <!-- Form -->
+    <form id="formLogin" class="space-y-5">
+
+      <div>
+        <label class="block text-sm text-slate-300 mb-2">
+          Email
+        </label>
+
+        <input
+          id="emailLogin"
+          type="email"
+          placeholder="Digite seu email"
+          class="w-full bg-slate-900/70 border border-white/10 rounded-2xl px-5 py-4 outline-none focus:border-blue-500 transition text-white placeholder:text-slate-500"
+        >
+      </div>
+
+      <div>
+        <label class="block text-sm text-slate-300 mb-2">
+          Senha
+        </label>
+
+        <input
+          id="senhaLogin"
+          type="password"
+          placeholder="Digite sua senha"
+          class="w-full bg-slate-900/70 border border-white/10 rounded-2xl px-5 py-4 outline-none focus:border-blue-500 transition text-white placeholder:text-slate-500"
+        >
+      </div>
+
+      <button
+        type="submit"
+        class="w-full bg-gradient-to-r from-blue-500 to-cyan-400 py-4 rounded-2xl font-bold text-base md:text-lg shadow-2xl shadow-blue-500/20"
+      >
+        Entrar
+      </button>
+
+    </form>
+
+    <p class="text-center text-slate-400 mt-8">
+      Não possui conta?
+      <a href="cadastro.html" class="text-cyan-300 hover:text-cyan-200 font-semibold transition">
+        Criar conta
+      </a>
+    </p>
+
+  </div>
+
+  <script>
+
+    const formLogin = document.getElementById("formLogin");
+
+    formLogin.addEventListener("submit", (event) => {
+
+      event.preventDefault();
+
+      const emailDigitado = document.getElementById("emailLogin").value;
+      const senhaDigitada = document.getElementById("senhaLogin").value;
+
+      const usuarioSalvo = JSON.parse(
+        localStorage.getItem("usuarioStudyFlow")
+      );
+
+      if (
+        usuarioSalvo &&
+        emailDigitado === usuarioSalvo.email &&
+        senhaDigitada === usuarioSalvo.senha
+      ) {
+
+        localStorage.setItem(
+          "usuarioLogado",
+          JSON.stringify(usuarioSalvo)
+        );
+
+        alert("Login realizado com sucesso!");
+
+        window.location.href = "dashboard.html";
+
+      } else {
+
+        alert("Email ou senha incorretos!");
+
+      }
+
+    });
+
+  </script>
+
+</body>
+</html>

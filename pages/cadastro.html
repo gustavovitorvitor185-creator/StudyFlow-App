@@ -1,0 +1,432 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <title>Cadastro | StudyFlow</title>
+
+  <script src="https://cdn.tailwindcss.com"></script>
+</head>
+
+<body class="min-h-screen bg-gradient-to-br from-slate-950 via-slate-900 to-slate-950 flex items-center justify-center overflow-x-hidden text-white font-sans p-4">
+
+  <!-- Glow -->
+  <div class="absolute top-0 left-0 w-96 h-96 bg-blue-500/20 blur-3xl rounded-full"></div>
+  <div class="absolute bottom-0 right-0 w-96 h-96 bg-cyan-500/20 blur-3xl rounded-full"></div>
+
+  <!-- Card -->
+  <div class="relative z-10 w-full max-w-lg mx-4 bg-white/5 backdrop-blur-2xl border border-white/10 rounded-[32px] p-6 md:p-8 shadow-2xl shadow-blue-500/10">
+
+    <!-- Logo -->
+    <div class="flex flex-col items-center mb-10">
+
+      <img
+        src="../assets/StudyFlow.png"
+        alt="StudyFlow"
+        class="w-48 h-48 object-contain mb-4"
+      />
+
+      <p class="text-slate-400 mt-2 text-center">
+        Crie sua conta e organize seus estudos.
+      </p>
+
+    </div>
+
+    <!-- Form -->
+    <form id="formCadastro" class="space-y-5">
+
+      <!-- Nome -->
+      <div>
+
+        <label class="block text-sm text-slate-300 mb-2">
+          Nome completo
+        </label>
+
+        <input
+          id="nome"
+          type="text"
+          placeholder="Digite seu nome"
+          class="w-full bg-slate-900/70 border border-white/10 rounded-2xl px-5 py-4 outline-none focus:border-blue-500 transition text-white"
+          required
+        >
+
+      </div>
+
+      <!-- Email -->
+      <div>
+
+        <label class="block text-sm text-slate-300 mb-2">
+          Email
+        </label>
+
+        <input
+          id="email"
+          type="email"
+          placeholder="Digite seu email"
+          class="w-full bg-slate-900/70 border border-white/10 rounded-2xl px-5 py-4 outline-none focus:border-blue-500 transition text-white"
+          required
+        >
+
+      </div>
+
+      <!-- Senha -->
+      <div>
+
+        <label class="block text-sm text-slate-300 mb-2">
+          Senha
+        </label>
+
+        <input
+          id="senha"
+          type="password"
+          placeholder="Digite sua senha"
+          class="w-full bg-slate-900/70 border border-white/10 rounded-2xl px-5 py-4 outline-none focus:border-blue-500 transition text-white"
+          required
+        >
+
+        <!-- Requisitos da senha -->
+        <div class="mt-3 bg-slate-950/50 border border-white/5 rounded-2xl p-4">
+
+          <p class="text-sm text-slate-300 font-semibold mb-3">
+            Sua senha deve conter:
+          </p>
+
+          <div class="space-y-2 text-sm">
+
+            <p id="reqTamanho" class="text-slate-500 transition">
+              <span class="mr-2">○</span>
+              Mínimo de 8 caracteres
+            </p>
+
+            <p id="reqMaiuscula" class="text-slate-500 transition">
+              <span class="mr-2">○</span>
+              Pelo menos 1 letra maiúscula
+            </p>
+
+            <p id="reqSimbolo" class="text-slate-500 transition">
+              <span class="mr-2">○</span>
+              Pelo menos 1 símbolo
+            </p>
+
+          </div>
+
+        </div>
+
+      </div>
+
+      <!-- Confirmar Senha -->
+      <div>
+
+        <label class="block text-sm text-slate-300 mb-2">
+          Confirmar senha
+        </label>
+
+        <input
+          id="confirmarSenha"
+          type="password"
+          placeholder="Confirme sua senha"
+          class="w-full bg-slate-900/70 border border-white/10 rounded-2xl px-5 py-4 outline-none focus:border-blue-500 transition text-white placeholder:text-slate-500"
+          required
+        >
+
+        <p id="mensagemSenha" class="text-sm mt-2 hidden"></p>
+
+      </div>
+
+      <!-- Checkbox -->
+      <div class="space-y-2">
+
+        <label class="flex items-center gap-3 text-slate-400 text-sm cursor-pointer">
+
+          <input
+            id="aceitouTermos"
+            type="checkbox"
+            class="accent-blue-500 w-4 h-4"
+          >
+
+          Concordo com os termos e condições
+
+        </label>
+
+        <button
+          type="button"
+          id="btnTermos"
+          class="text-cyan-300 text-sm hover:text-cyan-200 transition"
+        >
+          Ver termos
+        </button>
+
+      </div>
+
+      <!-- Button -->
+      <button
+        type="submit"
+        class="w-full bg-gradient-to-r from-blue-500 to-cyan-400 py-4 rounded-2xl font-bold text-base md:text-lg shadow-2xl shadow-blue-500/20 hover:scale-[1.02] transition duration-300"
+      >
+        Criar conta
+      </button>
+
+    </form>
+
+    <!-- Divider -->
+    <div class="flex items-center gap-4 my-8">
+
+      <div class="flex-1 h-px bg-white/10"></div>
+
+      <span class="text-slate-500 text-sm">
+        ou
+      </span>
+
+      <div class="flex-1 h-px bg-white/10"></div>
+
+    </div>
+
+    <!-- Google -->
+    <button
+      type="button"
+      class="w-full bg-white/5 border border-white/10 hover:bg-white/10 transition py-4 rounded-2xl font-semibold text-slate-200"
+    >
+      Continuar com Google
+    </button>
+
+    <!-- Login -->
+    <p class="text-center text-slate-400 mt-8">
+
+      Já possui conta?
+
+      <a
+        href="login.html"
+        class="text-cyan-300 hover:text-cyan-200 font-semibold transition"
+      >
+        Entrar
+      </a>
+
+    </p>
+
+  </div>
+
+  <!-- Modal Termos -->
+  <div
+    id="modalTermos"
+    class="hidden fixed inset-0 bg-black/70 backdrop-blur-sm flex items-center justify-center z-50 p-4"
+  >
+
+    <div class="bg-slate-900 border border-white/10 rounded-3xl p-8 max-w-2xl w-full max-h-[80vh] overflow-y-auto">
+
+      <div class="flex justify-between items-center mb-6">
+
+        <h2 class="text-2xl font-bold text-white">
+          Termos de Uso
+        </h2>
+
+        <button
+          id="fecharTermos"
+          type="button"
+          class="text-slate-400 hover:text-white text-xl"
+        >
+          ✕
+        </button>
+
+      </div>
+
+      <div class="space-y-4 text-slate-300">
+
+        <p>
+          Bem-vindo ao StudyFlow.
+        </p>
+
+        <p>
+          O StudyFlow é uma plataforma destinada à organização de estudos, tarefas, eventos e produtividade pessoal.
+        </p>
+
+        <p>
+          Os dados armazenados são mantidos localmente no navegador do usuário.
+        </p>
+
+        <p>
+          O usuário é responsável pelas informações cadastradas dentro da plataforma.
+        </p>
+
+        <p>
+          O uso da plataforma implica na concordância com estes termos.
+        </p>
+
+        <p>
+          Estes termos podem ser atualizados futuramente para refletir novas funcionalidades do sistema.
+        </p>
+
+      </div>
+
+    </div>
+
+  </div>
+
+  <!-- Validação do cadastro -->
+  <script>
+
+    const formCadastro = document.getElementById("formCadastro");
+
+    const senha = document.getElementById("senha");
+    const confirmarSenha = document.getElementById("confirmarSenha");
+
+    const reqTamanho = document.getElementById("reqTamanho");
+    const reqMaiuscula = document.getElementById("reqMaiuscula");
+    const reqSimbolo = document.getElementById("reqSimbolo");
+
+    const mensagemSenha = document.getElementById("mensagemSenha");
+
+    // Validação da senha em tempo real
+    senha.addEventListener("input", () => {
+
+      const valor = senha.value;
+
+      const tamanhoValido = valor.length >= 8;
+      const maiusculaValida = /[A-Z]/.test(valor);
+      const simboloValido = /[^A-Za-z0-9]/.test(valor);
+
+      atualizarRequisito(
+        reqTamanho,
+        tamanhoValido
+      );
+
+      atualizarRequisito(
+        reqMaiuscula,
+        maiusculaValida
+      );
+
+      atualizarRequisito(
+        reqSimbolo,
+        simboloValido
+      );
+
+    });
+
+    // Atualiza visual dos requisitos
+    function atualizarRequisito(elemento, valido) {
+
+      if (valido) {
+
+        elemento.classList.remove("text-slate-500");
+        elemento.classList.add("text-emerald-400");
+
+        elemento.querySelector("span").textContent = "✓";
+
+      } else {
+
+        elemento.classList.remove("text-emerald-400");
+        elemento.classList.add("text-slate-500");
+
+        elemento.querySelector("span").textContent = "○";
+
+      }
+
+    }
+
+    // Verifica confirmação da senha enquanto digita
+    confirmarSenha.addEventListener("input", () => {
+
+      if (confirmarSenha.value === "") {
+
+        mensagemSenha.classList.add("hidden");
+        return;
+
+      }
+
+      mensagemSenha.classList.remove("hidden");
+
+      if (senha.value === confirmarSenha.value) {
+
+        mensagemSenha.textContent = "✓ As senhas coincidem.";
+        mensagemSenha.classList.remove("text-red-400");
+        mensagemSenha.classList.add("text-emerald-400");
+
+      } else {
+
+        mensagemSenha.textContent = "✕ As senhas não coincidem.";
+        mensagemSenha.classList.remove("text-emerald-400");
+        mensagemSenha.classList.add("text-red-400");
+
+      }
+
+    });
+
+    // Cadastro
+    formCadastro.addEventListener("submit", (event) => {
+
+      event.preventDefault();
+
+      const nome = document.getElementById("nome").value.trim();
+      const email = document.getElementById("email").value.trim();
+
+      const valorSenha = senha.value;
+      const valorConfirmacao = confirmarSenha.value;
+
+      const aceitouTermos =
+        document.getElementById("aceitouTermos").checked;
+
+      // Regras da senha
+      const tamanhoValido = valorSenha.length >= 8;
+      const maiusculaValida = /[A-Z]/.test(valorSenha);
+      const simboloValido = /[^A-Za-z0-9]/.test(valorSenha);
+
+      // Verifica requisitos da senha
+      if (!tamanhoValido || !maiusculaValida || !simboloValido) {
+
+        alert(
+          "Sua senha não atende aos requisitos. Verifique as condições indicadas abaixo do campo de senha."
+        );
+
+        return;
+
+      }
+
+      // Verifica se as senhas coincidem
+      if (valorSenha !== valorConfirmacao) {
+
+        alert(
+          "As senhas não coincidem. Digite a mesma senha nos dois campos."
+        );
+
+        return;
+
+      }
+
+      // Verifica os termos
+      if (!aceitouTermos) {
+
+        alert(
+          "Você precisa aceitar os termos e condições para criar sua conta."
+        );
+
+        return;
+
+      }
+
+      // Cria o usuário
+      const usuario = {
+        nome,
+        email,
+        senha: valorSenha
+      };
+
+      // Salva no navegador
+      localStorage.setItem(
+        "usuarioStudyFlow",
+        JSON.stringify(usuario)
+      );
+
+      alert("Conta criada com sucesso!");
+
+      // Vai para o login
+      window.location.href = "login.html";
+
+    });
+
+  </script>
+
+  <!-- Script dos termos -->
+  <script src="../js/cadastro.js"></script>
+
+</body>
+</html>

@@ -1,0 +1,1246 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0">
+
+    <title>StudyFlow AI | StudyFlow</title>
+
+    <script src="https://cdn.tailwindcss.com"></script>
+
+    <link
+        rel="stylesheet"
+        href="../css/style.css">
+
+    <link
+        rel="stylesheet"
+        href="../css/responsive.css">
+
+</head>
+
+
+<body
+    class="bg-gradient-to-br from-slate-950 via-slate-900 to-slate-950 min-h-screen text-slate-100 font-sans overflow-x-hidden">
+
+
+    <!-- ========================================
+         EFEITOS DE FUNDO
+    ========================================= -->
+
+    <div
+        class="fixed top-0 left-0 w-96 h-96 bg-blue-500/10 blur-3xl rounded-full pointer-events-none">
+    </div>
+
+    <div
+        class="fixed bottom-0 right-0 w-96 h-96 bg-cyan-500/10 blur-3xl rounded-full pointer-events-none">
+    </div>
+
+
+    <!-- ========================================
+         LAYOUT
+    ========================================= -->
+
+    <div class="flex min-h-screen relative z-10">
+
+
+        <!-- ========================================
+             SIDEBAR
+        ========================================= -->
+
+        <aside
+            id="sidebarIA"
+            class="hidden lg:flex
+                   sidebar-desktop
+                   bg-slate-950/90
+                   backdrop-blur-xl
+                   border-r border-white/10
+                   flex-col
+                   justify-between
+                   min-h-screen">
+
+
+            <!-- PARTE SUPERIOR -->
+
+            <div class="sidebar-content">
+
+
+                <!-- LOGO -->
+
+                <div class="brand-container">
+
+                    <img
+                        src="../assets/StudyFlow.png"
+                        alt="StudyFlow"
+                        class="brand-logo-collapsed">
+
+                    <img
+                        src="../assets/StudyFlow.2.png"
+                        alt="StudyFlow"
+                        class="brand-logo-expanded">
+
+                </div>
+
+
+                <!-- NAVEGAÇÃO -->
+
+                <nav class="sidebar-nav">
+
+
+                    <!-- DASHBOARD -->
+
+                    <a
+                        href="dashboard.html"
+                        class="sidebar-link"
+                        title="Dashboard">
+
+                        <svg
+                            class="sidebar-icon"
+                            viewBox="0 0 24 24"
+                            fill="none"
+                            stroke="currentColor"
+                            stroke-width="1.8"
+                            stroke-linecap="round"
+                            stroke-linejoin="round">
+
+                            <path d="M3 11.5L12 4l9 7.5"></path>
+
+                            <path d="M5.5 10v9h13v-9"></path>
+
+                            <path d="M9.5 19v-5h5v5"></path>
+
+                        </svg>
+
+                        <span class="sidebar-text">
+                            Dashboard
+                        </span>
+
+                    </a>
+
+
+                    <!-- TAREFAS -->
+
+                    <a
+                        href="tarefas.html"
+                        class="sidebar-link"
+                        title="Tarefas">
+
+                        <svg
+                            class="sidebar-icon"
+                            viewBox="0 0 24 24"
+                            fill="none"
+                            stroke="currentColor"
+                            stroke-width="1.8"
+                            stroke-linecap="round"
+                            stroke-linejoin="round">
+
+                            <rect
+                                x="4"
+                                y="3"
+                                width="16"
+                                height="18"
+                                rx="3">
+                            </rect>
+
+                            <path d="M8 8h.01"></path>
+
+                            <path d="M11 8h5"></path>
+
+                            <path d="M8 13l1.5 1.5L12 12"></path>
+
+                            <path d="M14 13h2"></path>
+
+                        </svg>
+
+                        <span class="sidebar-text">
+                            Tarefas
+                        </span>
+
+                    </a>
+
+
+                    <!-- CALENDÁRIO -->
+
+                    <a
+                        href="calendario.html"
+                        class="sidebar-link"
+                        title="Calendário">
+
+                        <svg
+                            class="sidebar-icon"
+                            viewBox="0 0 24 24"
+                            fill="none"
+                            stroke="currentColor"
+                            stroke-width="1.8"
+                            stroke-linecap="round"
+                            stroke-linejoin="round">
+
+                            <rect
+                                x="3"
+                                y="5"
+                                width="18"
+                                height="16"
+                                rx="3">
+                            </rect>
+
+                            <path d="M16 3v4"></path>
+
+                            <path d="M8 3v4"></path>
+
+                            <path d="M3 10h18"></path>
+
+                            <path d="M8 14h.01"></path>
+
+                            <path d="M12 14h.01"></path>
+
+                            <path d="M16 14h.01"></path>
+
+                        </svg>
+
+                        <span class="sidebar-text">
+                            Calendário
+                        </span>
+
+                    </a>
+
+
+                    <!-- POMODORO -->
+
+                    <a
+                        href="pomodoro.html"
+                        class="sidebar-link"
+                        title="Pomodoro">
+
+                        <svg
+                            class="sidebar-icon"
+                            viewBox="0 0 24 24"
+                            fill="none"
+                            stroke="currentColor"
+                            stroke-width="1.8"
+                            stroke-linecap="round"
+                            stroke-linejoin="round">
+
+                            <circle
+                                cx="12"
+                                cy="13"
+                                r="7">
+                            </circle>
+
+                            <path d="M12 9v4l2.5 1.5"></path>
+
+                            <path d="M9 3h6"></path>
+
+                            <path d="M12 3v2"></path>
+
+                        </svg>
+
+                        <span class="sidebar-text">
+                            Pomodoro
+                        </span>
+
+                    </a>
+
+
+                    <!-- STUDYFLOW AI -->
+
+                    <a
+                        href="ia.html"
+                        class="sidebar-link sidebar-link-active"
+                        title="StudyFlow AI">
+
+                        <svg
+                            class="sidebar-icon"
+                            viewBox="0 0 24 24"
+                            fill="none"
+                            stroke="currentColor"
+                            stroke-width="1.8"
+                            stroke-linecap="round"
+                            stroke-linejoin="round">
+
+                            <path d="M12 3l1.8 5.2L19 10l-5.2 1.8L12 17l-1.8-5.2L5 10l5.2-1.8L12 3z"></path>
+
+                            <path d="M19 15l.7 2.3L22 18l-2.3.7L19 21l-.7-2.3L16 18l2.3-.7L19 15z"></path>
+
+                        </svg>
+
+                        <span class="sidebar-text">
+                            StudyFlow AI
+                        </span>
+
+                    </a>
+
+
+                    <!-- MEU PERFIL -->
+
+                    <a
+                        href="perfil.html"
+                        class="sidebar-link"
+                        title="Meu Perfil">
+
+                        <svg
+                            class="sidebar-icon"
+                            viewBox="0 0 24 24"
+                            fill="none"
+                            stroke="currentColor"
+                            stroke-width="1.8"
+                            stroke-linecap="round"
+                            stroke-linejoin="round">
+
+                            <circle
+                                cx="12"
+                                cy="8"
+                                r="3.5">
+                            </circle>
+
+                            <path
+                                d="M5 21c0-3.5 2.8-6 7-6s7 2.5 7 6">
+                            </path>
+
+                        </svg>
+
+                        <span class="sidebar-text">
+                            Meu Perfil
+                        </span>
+
+                    </a>
+
+
+                    <!-- SAIR -->
+
+                    <a
+                        href="#"
+                        id="btnLogout"
+                        class="sidebar-link sidebar-link-logout"
+                        title="Sair">
+
+                        <svg
+                            class="sidebar-icon"
+                            viewBox="0 0 24 24"
+                            fill="none"
+                            stroke="currentColor"
+                            stroke-width="1.8"
+                            stroke-linecap="round"
+                            stroke-linejoin="round">
+
+                            <path d="M10 17l5-5-5-5"></path>
+
+                            <path d="M15 12H3"></path>
+
+                            <path d="M14 4h5a2 2 0 0 1 2 2v12a2 2 0 0 1-2 2h-5"></path>
+
+                        </svg>
+
+                        <span class="sidebar-text">
+                            Sair
+                        </span>
+
+                    </a>
+
+                </nav>
+
+            </div>
+
+
+            <!-- PROGRESSO -->
+
+            <div class="sidebar-progress">
+
+                <div class="flex justify-between items-center mb-3">
+
+                    <p class="text-sm text-slate-400">
+                        Progresso
+                    </p>
+
+                    <span class="text-cyan-300 text-sm font-semibold">
+                        75%
+                    </span>
+
+                </div>
+
+
+                <h2 class="text-3xl font-black">
+                    15/20
+                </h2>
+
+
+                <div
+                    class="w-full h-2 bg-slate-700/50 rounded-full mt-4 overflow-hidden">
+
+                    <div
+                        class="h-full w-[75%] bg-gradient-to-r from-blue-500 to-cyan-400 rounded-full">
+                    </div>
+
+                </div>
+
+
+                <p class="text-slate-500 text-xs mt-3">
+                    Você está quase terminando
+                </p>
+
+            </div>
+
+        </aside>
+
+
+        <!-- ========================================
+             CONTEÚDO PRINCIPAL
+        ========================================= -->
+
+        <main
+            class="flex-1 min-w-0 p-4 md:p-8 pt-24 lg:pt-8 overflow-y-auto">
+
+
+            <!-- HEADER MOBILE -->
+
+            <div
+                class="lg:hidden fixed top-0 left-0 right-0 z-50
+                       flex items-center justify-between
+                       p-4
+                       bg-slate-950/90
+                       backdrop-blur-xl
+                       border-b border-white/10">
+
+                <div class="flex items-center gap-3">
+
+                    <img
+                        src="../assets/StudyFlow.2.png"
+                        alt="StudyFlow"
+                        class="mobile-brand-logo">
+
+                </div>
+
+
+                <button
+                    id="btnMenuIA"
+                    type="button"
+                    aria-label="Abrir menu"
+                    class="w-11 h-11
+                           flex items-center justify-center
+                           bg-white/5
+                           hover:bg-white/10
+                           border border-white/10
+                           rounded-xl
+                           transition">
+
+                    <svg
+                        viewBox="0 0 24 24"
+                        width="22"
+                        height="22"
+                        fill="none"
+                        stroke="currentColor"
+                        stroke-width="1.8"
+                        stroke-linecap="round">
+
+                        <path d="M4 6h16"></path>
+
+                        <path d="M4 12h16"></path>
+
+                        <path d="M4 18h16"></path>
+
+                    </svg>
+
+                </button>
+
+            </div>
+
+
+            <!-- CABEÇALHO -->
+
+            <div
+                class="flex items-center justify-between mb-8 flex-wrap gap-4">
+
+                <div>
+
+                    <p class="text-cyan-300 font-medium mb-2">
+                        Seu assistente de estudos
+                    </p>
+
+                    <h2
+                        class="text-3xl md:text-5xl font-black leading-tight">
+
+                        StudyFlow
+
+                        <span
+                            class="bg-gradient-to-r from-blue-400 to-cyan-300 bg-clip-text text-transparent">
+
+                            AI
+
+                        </span>
+
+                    </h2>
+
+                    <p
+                        class="text-slate-400 mt-3 max-w-2xl">
+
+                        Tire dúvidas, revise conteúdos e aprenda de forma
+                        simples com seu assistente inteligente.
+
+                    </p>
+
+                </div>
+
+            </div>
+
+
+            <!-- ========================================
+                 CHAT
+            ========================================= -->
+
+            <section
+                class="bg-white/5
+                       backdrop-blur-xl
+                       border border-white/10
+                       rounded-3xl
+                       shadow-2xl
+                       overflow-hidden">
+
+
+                <!-- CABEÇALHO DO CHAT -->
+
+                <div
+                    class="flex items-center gap-4
+                           p-5 md:p-7
+                           border-b border-white/10">
+
+                    <div
+                        class="w-12 h-12
+                               flex items-center justify-center
+                               rounded-2xl
+                               bg-gradient-to-br
+                               from-blue-500/20
+                               to-cyan-400/10
+                               border border-blue-400/20
+                               text-cyan-300">
+
+                        <svg
+                            viewBox="0 0 24 24"
+                            width="25"
+                            height="25"
+                            fill="none"
+                            stroke="currentColor"
+                            stroke-width="1.8"
+                            stroke-linecap="round"
+                            stroke-linejoin="round">
+
+                            <path d="M12 3l1.8 5.2L19 10l-5.2 1.8L12 17l-1.8-5.2L5 10l5.2-1.8L12 3z"></path>
+
+                            <path d="M19 15l.7 2.3L22 18l-2.3.7L19 21l-.7-2.3L16 18l2.3-.7L19 15z"></path>
+
+                        </svg>
+
+                    </div>
+
+
+                    <div>
+
+                        <h3 class="text-xl font-black">
+                            StudyFlow AI
+                        </h3>
+
+                        <p class="text-slate-400 text-sm">
+                            Assistente de estudos
+                        </p>
+
+                    </div>
+
+                </div>
+
+
+                <!-- ÁREA DE MENSAGENS -->
+
+                <div
+                    id="chat"
+                    class="p-5 md:p-8
+                           space-y-5
+                           min-h-[420px]
+                           max-h-[600px]
+                           overflow-y-auto">
+
+
+                    <!-- MENSAGEM INICIAL -->
+
+                    <div class="flex gap-3">
+
+                        <div
+                            class="w-10 h-10
+                                   shrink-0
+                                   rounded-xl
+                                   bg-gradient-to-br
+                                   from-blue-500/20
+                                   to-cyan-400/10
+                                   border border-blue-400/20
+                                   flex items-center justify-center
+                                   text-cyan-300">
+
+                            <svg
+                                viewBox="0 0 24 24"
+                                width="20"
+                                height="20"
+                                fill="none"
+                                stroke="currentColor"
+                                stroke-width="1.8"
+                                stroke-linecap="round"
+                                stroke-linejoin="round">
+
+                                <path d="M12 3l1.8 5.2L19 10l-5.2 1.8L12 17l-1.8-5.2L5 10l5.2-1.8L12 3z"></path>
+
+                            </svg>
+
+                        </div>
+
+
+                        <div
+                            class="max-w-2xl
+                                   bg-slate-900/70
+                                   border border-white/5
+                                   rounded-2xl
+                                   rounded-tl-md
+                                   px-5 py-4">
+
+                            <p
+                                class="text-slate-200
+                                       leading-relaxed">
+
+                                Olá! Eu sou o StudyFlow AI. 👋
+                                <br><br>
+                                Posso ajudar você com matérias,
+                                exercícios, revisões, redação e muito mais.
+                                <br><br>
+                                <span class="text-cyan-300">
+                                    O que você gostaria de estudar hoje?
+                                </span>
+
+                            </p>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+
+                <!-- ÁREA DE ENVIO -->
+
+                <div
+                    class="p-4 md:p-6
+                           border-t border-white/10
+                           bg-slate-950/30">
+
+                    <div
+                        class="flex flex-col sm:flex-row gap-3">
+
+                        <input
+                            id="pergunta"
+                            type="text"
+                            placeholder="Digite sua dúvida..."
+                            autocomplete="off"
+                            class="flex-1
+                                   bg-slate-900/70
+                                   border border-white/10
+                                   rounded-2xl
+                                   px-5 py-4
+                                   text-slate-100
+                                   placeholder:text-slate-500
+                                   outline-none
+                                   focus:border-blue-400/50
+                                   focus:ring-2
+                                   focus:ring-blue-500/10
+                                   transition">
+
+
+                        <button
+                            id="btnEnviar"
+                            type="button"
+                            class="bg-gradient-to-r
+                                   from-blue-500
+                                   to-cyan-400
+                                   hover:scale-[1.02]
+                                   transition
+                                   duration-300
+                                   px-7
+                                   py-4
+                                   rounded-2xl
+                                   font-bold
+                                   shadow-2xl
+                                   shadow-blue-500/20
+                                   flex items-center
+                                   justify-center
+                                   gap-2
+                                   sm:min-w-[130px]">
+
+                            <span>
+                                Enviar
+                            </span>
+
+                            <svg
+                                viewBox="0 0 24 24"
+                                width="18"
+                                height="18"
+                                fill="none"
+                                stroke="currentColor"
+                                stroke-width="2"
+                                stroke-linecap="round"
+                                stroke-linejoin="round">
+
+                                <path d="M22 2L11 13"></path>
+
+                                <path d="M22 2l-7 20-4-9-9-4 20-7z"></path>
+
+                            </svg>
+
+                        </button>
+
+                    </div>
+
+
+                    <p
+                        class="text-slate-500
+                               text-xs
+                               mt-3
+                               text-center">
+
+                        O StudyFlow AI pode cometer erros.
+                        Sempre confira informações importantes.
+
+                    </p>
+
+                </div>
+
+            </section>
+
+
+            <!-- ========================================
+                 DICAS
+            ========================================= -->
+
+            <section
+                class="grid grid-cols-1 md:grid-cols-3 gap-4 mt-6">
+
+
+                <!-- DICA 1 -->
+
+                <div
+                    class="bg-white/5
+                           backdrop-blur-xl
+                           border border-white/10
+                           rounded-3xl
+                           p-5
+                           shadow-2xl">
+
+                    <div
+                        class="w-10 h-10
+                               rounded-xl
+                               bg-blue-500/10
+                               border border-blue-500/20
+                               flex items-center justify-center
+                               text-blue-300
+                               mb-4">
+
+                        <svg
+                            viewBox="0 0 24 24"
+                            width="20"
+                            height="20"
+                            fill="none"
+                            stroke="currentColor"
+                            stroke-width="1.8"
+                            stroke-linecap="round"
+                            stroke-linejoin="round">
+
+                            <path d="M9 18h6"></path>
+
+                            <path d="M10 22h4"></path>
+
+                            <path d="M12 2a7 7 0 0 0-4 12.74V17h8v-2.26A7 7 0 0 0 12 2z"></path>
+
+                        </svg>
+
+                    </div>
+
+                    <h3 class="font-bold text-lg">
+                        Tire suas dúvidas
+                    </h3>
+
+                    <p class="text-slate-500 text-sm mt-2 leading-relaxed">
+                        Pergunte sobre qualquer conteúdo que esteja estudando.
+                    </p>
+
+                </div>
+
+
+                <!-- DICA 2 -->
+
+                <div
+                    class="bg-white/5
+                           backdrop-blur-xl
+                           border border-white/10
+                           rounded-3xl
+                           p-5
+                           shadow-2xl">
+
+                    <div
+                        class="w-10 h-10
+                               rounded-xl
+                               bg-cyan-500/10
+                               border border-cyan-500/20
+                               flex items-center justify-center
+                               text-cyan-300
+                               mb-4">
+
+                        <svg
+                            viewBox="0 0 24 24"
+                            width="20"
+                            height="20"
+                            fill="none"
+                            stroke="currentColor"
+                            stroke-width="1.8"
+                            stroke-linecap="round"
+                            stroke-linejoin="round">
+
+                            <path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"></path>
+
+                            <path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"></path>
+
+                        </svg>
+
+                    </div>
+
+                    <h3 class="font-bold text-lg">
+                        Aprenda de verdade
+                    </h3>
+
+                    <p class="text-slate-500 text-sm mt-2 leading-relaxed">
+                        Peça explicações passo a passo e exemplos para entender melhor.
+                    </p>
+
+                </div>
+
+
+                <!-- DICA 3 -->
+
+                <div
+                    class="bg-white/5
+                           backdrop-blur-xl
+                           border border-white/10
+                           rounded-3xl
+                           p-5
+                           shadow-2xl">
+
+                    <div
+                        class="w-10 h-10
+                               rounded-xl
+                               bg-blue-500/10
+                               border border-blue-500/20
+                               flex items-center justify-center
+                               text-blue-300
+                               mb-4">
+
+                        <svg
+                            viewBox="0 0 24 24"
+                            width="20"
+                            height="20"
+                            fill="none"
+                            stroke="currentColor"
+                            stroke-width="1.8"
+                            stroke-linecap="round"
+                            stroke-linejoin="round">
+
+                            <path d="M4 4h16v16H4z"></path>
+
+                            <path d="M8 8h8"></path>
+
+                            <path d="M8 12h8"></path>
+
+                            <path d="M8 16h5"></path>
+
+                        </svg>
+
+                    </div>
+
+                    <h3 class="font-bold text-lg">
+                        Revise conteúdos
+                    </h3>
+
+                    <p class="text-slate-500 text-sm mt-2 leading-relaxed">
+                        Use a IA para resumir e revisar aquilo que você já estudou.
+                    </p>
+
+                </div>
+
+            </section>
+
+
+            <!-- FRASE -->
+
+            <div
+                class="mt-6
+                       bg-gradient-to-br
+                       from-blue-500/20
+                       to-cyan-400/10
+                       backdrop-blur-xl
+                       border border-white/10
+                       rounded-3xl
+                       p-5 md:p-7
+                       shadow-2xl">
+
+                <p
+                    class="text-slate-300
+                           text-lg
+                           leading-relaxed">
+
+                    “Aprender fica mais fácil quando você entende o caminho.”
+
+                </p>
+
+                <p
+                    class="text-cyan-300
+                           mt-5
+                           font-semibold">
+
+                    — StudyFlow AI
+
+                </p>
+
+            </div>
+
+
+        </main>
+
+    </div>
+
+
+    <!-- ========================================
+         SCRIPTS
+    ========================================= -->
+
+    <script src="../js/auth.js"></script>
+
+
+    <!-- ========================================
+         MENU MOBILE + IA
+    ========================================= -->
+
+    <script>
+
+        /* ========================================
+           MENU MOBILE
+        ========================================= */
+
+        const btnMenuIA =
+            document.getElementById("btnMenuIA");
+
+        const sidebarIA =
+            document.getElementById("sidebarIA");
+
+
+        if (
+            btnMenuIA &&
+            sidebarIA
+        ) {
+
+            btnMenuIA.addEventListener(
+                "click",
+                () => {
+
+                    sidebarIA.classList.toggle(
+                        "mobile-open"
+                    );
+
+                }
+            );
+
+        }
+
+
+        /* ========================================
+           STUDYFLOW AI
+        ========================================= */
+
+        const perguntaInput =
+            document.getElementById("pergunta");
+
+        const btnEnviar =
+            document.getElementById("btnEnviar");
+
+        const chat =
+            document.getElementById("chat");
+
+
+        async function enviarPergunta() {
+
+            const pergunta =
+                perguntaInput.value.trim();
+
+
+            if (!pergunta) {
+                return;
+            }
+
+
+            /* ==============================
+               MENSAGEM DO USUÁRIO
+            ============================== */
+
+            const mensagemUsuario =
+                document.createElement("div");
+
+            mensagemUsuario.className =
+                "flex justify-end";
+
+
+            mensagemUsuario.innerHTML = `
+
+                <div
+                    class="max-w-2xl
+                           bg-blue-500/10
+                           border border-blue-500/20
+                           rounded-2xl
+                           rounded-tr-md
+                           px-5 py-4">
+
+                    <p
+                        class="text-slate-100
+                               leading-relaxed">
+
+                        ${pergunta}
+
+                    </p>
+
+                </div>
+
+            `;
+
+
+            chat.appendChild(
+                mensagemUsuario
+            );
+
+
+            perguntaInput.value = "";
+
+            btnEnviar.disabled = true;
+
+            btnEnviar.classList.add(
+                "opacity-60",
+                "cursor-not-allowed"
+            );
+
+            btnEnviar.querySelector("span").textContent =
+                "Pensando...";
+
+
+            chat.scrollTop =
+                chat.scrollHeight;
+
+
+            try {
+
+                /* ==============================
+                   CONSULTA À API
+                ============================== */
+
+                const resposta =
+                    await fetch(
+                        "http://localhost:3000/api/ia",
+                        {
+                            method: "POST",
+
+                            headers: {
+                                "Content-Type":
+                                    "application/json"
+                            },
+
+                            body: JSON.stringify({
+                                pergunta: pergunta
+                            })
+                        }
+                    );
+
+
+                const dados =
+                    await resposta.json();
+
+
+                if (!resposta.ok) {
+
+                    throw new Error(
+                        dados.erro ||
+                        "Erro ao consultar a IA."
+                    );
+
+                }
+
+
+                /* ==============================
+                   RESPOSTA DA IA
+                ============================== */
+
+                const mensagemIA =
+                    document.createElement("div");
+
+
+                mensagemIA.className =
+                    "flex gap-3";
+
+
+                mensagemIA.innerHTML = `
+
+                    <div
+                        class="w-10 h-10
+                               shrink-0
+                               rounded-xl
+                               bg-gradient-to-br
+                               from-blue-500/20
+                               to-cyan-400/10
+                               border border-blue-400/20
+                               flex items-center justify-center
+                               text-cyan-300">
+
+                        <svg
+                            viewBox="0 0 24 24"
+                            width="20"
+                            height="20"
+                            fill="none"
+                            stroke="currentColor"
+                            stroke-width="1.8"
+                            stroke-linecap="round"
+                            stroke-linejoin="round">
+
+                            <path d="M12 3l1.8 5.2L19 10l-5.2 1.8L12 17l-1.8-5.2L5 10l5.2-1.8L12 3z"></path>
+
+                        </svg>
+
+                    </div>
+
+
+                    <div
+                        class="max-w-2xl
+                               bg-slate-900/70
+                               border border-white/5
+                               rounded-2xl
+                               rounded-tl-md
+                               px-5 py-4">
+
+                        <p
+                            class="text-slate-200
+                                   leading-relaxed
+                                   whitespace-pre-wrap">
+
+                            ${dados.resposta}
+
+                        </p>
+
+                    </div>
+
+                `;
+
+
+                chat.appendChild(
+                    mensagemIA
+                );
+
+
+            } catch (erro) {
+
+                console.error(
+                    "Erro:",
+                    erro
+                );
+
+
+                /* ==============================
+                   MENSAGEM DE ERRO
+                ============================== */
+
+                const mensagemErro =
+                    document.createElement("div");
+
+
+                mensagemErro.className =
+                    "flex gap-3";
+
+
+                mensagemErro.innerHTML = `
+
+                    <div
+                        class="max-w-2xl
+                               bg-red-500/10
+                               border border-red-500/20
+                               rounded-2xl
+                               px-5 py-4">
+
+                        <p class="text-red-300">
+
+                            Não foi possível obter uma resposta da IA.
+
+                        </p>
+
+                    </div>
+
+                `;
+
+
+                chat.appendChild(
+                    mensagemErro
+                );
+
+            } finally {
+
+                btnEnviar.disabled = false;
+
+                btnEnviar.classList.remove(
+                    "opacity-60",
+                    "cursor-not-allowed"
+                );
+
+                btnEnviar.querySelector("span").textContent =
+                    "Enviar";
+
+
+                chat.scrollTop =
+                    chat.scrollHeight;
+
+            }
+
+        }
+
+
+        /* ========================================
+           BOTÃO ENVIAR
+        ========================================= */
+
+        btnEnviar.addEventListener(
+            "click",
+            enviarPergunta
+        );
+
+
+        /* ========================================
+           ENTER
+        ========================================= */
+
+        perguntaInput.addEventListener(
+            "keydown",
+            function (event) {
+
+                if (
+                    event.key === "Enter" &&
+                    !btnEnviar.disabled
+                ) {
+
+                    enviarPergunta();
+
+                }
+
+            }
+        );
+
+    </script>
+
+
+</body>
+
+</html>

@@ -1,0 +1,1848 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0">
+
+    <title>Meu Perfil | StudyFlow</title>
+
+    <script src="https://cdn.tailwindcss.com"></script>
+
+    <link
+        rel="stylesheet"
+        href="../css/style.css">
+
+    <link
+        rel="stylesheet"
+        href="../css/responsive.css">
+
+</head>
+
+
+<body
+    class="bg-gradient-to-br from-slate-950 via-slate-900 to-slate-950 min-h-screen text-slate-100 font-sans overflow-x-hidden">
+
+
+    <!-- =====================================================
+         EFEITOS DE FUNDO
+    ====================================================== -->
+
+    <div
+        class="fixed top-0 left-0 w-96 h-96 bg-blue-500/10 blur-3xl rounded-full pointer-events-none">
+    </div>
+
+    <div
+        class="fixed bottom-0 right-0 w-96 h-96 bg-cyan-500/10 blur-3xl rounded-full pointer-events-none">
+    </div>
+
+
+    <!-- =====================================================
+         LAYOUT
+    ====================================================== -->
+
+    <div class="flex min-h-screen relative z-10">
+
+
+        <!-- =================================================
+             MENU MOBILE
+        ================================================== -->
+
+        <div
+            class="lg:hidden fixed top-0 left-0 right-0 z-50
+                   flex items-center justify-between
+                   p-4
+                   bg-slate-950/90
+                   backdrop-blur-xl
+                   border-b border-white/10">
+
+            <div class="flex items-center gap-3">
+
+                <img
+                    src="../assets/StudyFlow.2.png"
+                    alt="StudyFlow"
+                    class="mobile-brand-logo">
+
+            </div>
+
+
+            <button
+                id="btnMenuPerfil"
+                type="button"
+                aria-label="Abrir menu"
+                class="w-11 h-11
+                       flex items-center justify-center
+                       bg-white/5
+                       hover:bg-white/10
+                       border border-white/10
+                       rounded-xl
+                       transition">
+
+                <svg
+                    viewBox="0 0 24 24"
+                    width="22"
+                    height="22"
+                    fill="none"
+                    stroke="currentColor"
+                    stroke-width="1.8"
+                    stroke-linecap="round">
+
+                    <path d="M4 6h16"></path>
+                    <path d="M4 12h16"></path>
+                    <path d="M4 18h16"></path>
+
+                </svg>
+
+            </button>
+
+        </div>
+
+
+        <!-- =================================================
+             SIDEBAR
+        ================================================== -->
+
+        <aside
+            id="sidebarMaterias"
+            class="hidden lg:flex
+                   sidebar-desktop
+                   bg-slate-950/90
+                   backdrop-blur-xl
+                   border-r border-white/10
+                   flex-col
+                   justify-between
+                   min-h-screen">
+
+
+            <!-- =================================================
+                 PARTE SUPERIOR
+            ================================================== -->
+
+            <div class="sidebar-content">
+
+
+                <!-- =================================================
+                     LOGO
+                ================================================== -->
+
+                <div class="brand-container">
+
+                    <img
+                        src="../assets/StudyFlow.png"
+                        alt="StudyFlow"
+                        class="brand-logo-collapsed">
+
+                    <img
+                        src="../assets/StudyFlow.2.png"
+                        alt="StudyFlow"
+                        class="brand-logo-expanded">
+
+                </div>
+
+
+                <!-- =================================================
+                     NAVEGAÇÃO
+                ================================================== -->
+
+                <nav class="sidebar-nav">
+
+
+                    <!-- DASHBOARD -->
+
+                    <a
+                        href="dashboard.html"
+                        class="sidebar-link"
+                        title="Dashboard">
+
+                        <svg
+                            class="sidebar-icon"
+                            viewBox="0 0 24 24"
+                            fill="none"
+                            stroke="currentColor"
+                            stroke-width="1.8"
+                            stroke-linecap="round"
+                            stroke-linejoin="round">
+
+                            <path d="M3 11.5L12 4l9 7.5"></path>
+
+                            <path d="M5.5 10v9h13v-9"></path>
+
+                            <path d="M9.5 19v-5h5v5"></path>
+
+                        </svg>
+
+                        <span class="sidebar-text">
+                            Dashboard
+                        </span>
+
+                    </a>
+
+
+                    <!-- TAREFAS -->
+
+                    <a
+                        href="tarefas.html"
+                        class="sidebar-link"
+                        title="Tarefas">
+
+                        <svg
+                            class="sidebar-icon"
+                            viewBox="0 0 24 24"
+                            fill="none"
+                            stroke="currentColor"
+                            stroke-width="1.8"
+                            stroke-linecap="round"
+                            stroke-linejoin="round">
+
+                            <rect
+                                x="4"
+                                y="3"
+                                width="16"
+                                height="18"
+                                rx="3">
+                            </rect>
+
+                            <path d="M8 8h.01"></path>
+
+                            <path d="M11 8h5"></path>
+
+                            <path d="M8 13l1.5 1.5L12 12"></path>
+
+                            <path d="M14 13h2"></path>
+
+                        </svg>
+
+                        <span class="sidebar-text">
+                            Tarefas
+                        </span>
+
+                    </a>
+
+
+                    <!-- CALENDÁRIO -->
+
+                    <a
+                        href="calendario.html"
+                        class="sidebar-link"
+                        title="Calendário">
+
+                        <svg
+                            class="sidebar-icon"
+                            viewBox="0 0 24 24"
+                            fill="none"
+                            stroke="currentColor"
+                            stroke-width="1.8"
+                            stroke-linecap="round"
+                            stroke-linejoin="round">
+
+                            <rect
+                                x="3"
+                                y="5"
+                                width="18"
+                                height="16"
+                                rx="3">
+                            </rect>
+
+                            <path d="M16 3v4"></path>
+
+                            <path d="M8 3v4"></path>
+
+                            <path d="M3 10h18"></path>
+
+                            <path d="M8 14h.01"></path>
+
+                            <path d="M12 14h.01"></path>
+
+                            <path d="M16 14h.01"></path>
+
+                        </svg>
+
+                        <span class="sidebar-text">
+                            Calendário
+                        </span>
+
+                    </a>
+
+
+                    <!-- POMODORO -->
+
+                    <a
+                        href="pomodoro.html"
+                        class="sidebar-link"
+                        title="Pomodoro">
+
+                        <svg
+                            class="sidebar-icon"
+                            viewBox="0 0 24 24"
+                            fill="none"
+                            stroke="currentColor"
+                            stroke-width="1.8"
+                            stroke-linecap="round"
+                            stroke-linejoin="round">
+
+                            <circle
+                                cx="12"
+                                cy="13"
+                                r="7">
+                            </circle>
+
+                            <path d="M12 9v4l2.5 1.5"></path>
+
+                            <path d="M9 3h6"></path>
+
+                            <path d="M12 3v2"></path>
+
+                        </svg>
+
+                        <span class="sidebar-text">
+                            Pomodoro
+                        </span>
+
+                    </a>
+
+
+                    <!-- STUDYFLOW AI -->
+
+                    <a
+                        href="ia.html"
+                        class="sidebar-link"
+                        title="StudyFlow AI">
+
+                        <svg
+                            class="sidebar-icon"
+                            viewBox="0 0 24 24"
+                            fill="none"
+                            stroke="currentColor"
+                            stroke-width="1.8"
+                            stroke-linecap="round"
+                            stroke-linejoin="round">
+
+                            <path d="M12 3l1.8 5.2L19 10l-5.2 1.8L12 17l-1.8-5.2L5 10l5.2-1.8L12 3z"></path>
+
+                            <path d="M19 15l.7 2.3L22 18l-2.3.7L19 21l-.7-2.3L16 18l2.3-.7L19 15z"></path>
+
+                        </svg>
+
+                        <span class="sidebar-text">
+                            StudyFlow AI
+                        </span>
+
+                    </a>
+
+
+                    <!-- MEU PERFIL -->
+
+                    <a
+                        href="materias.html"
+                        class="sidebar-link sidebar-link-active"
+                        title="Meu Perfil">
+
+                        <svg
+                            class="sidebar-icon"
+                            viewBox="0 0 24 24"
+                            fill="none"
+                            stroke="currentColor"
+                            stroke-width="1.8"
+                            stroke-linecap="round"
+                            stroke-linejoin="round">
+
+                            <circle
+                                cx="12"
+                                cy="8"
+                                r="4">
+                            </circle>
+
+                            <path
+                                d="M4.5 21a7.5 7.5 0 0 1 15 0">
+                            </path>
+
+                        </svg>
+
+                        <span class="sidebar-text">
+                            Meu Perfil
+                        </span>
+
+                    </a>
+
+
+                    <!-- SAIR -->
+
+                    <a
+                        href="#"
+                        id="btnLogout"
+                        class="sidebar-link sidebar-link-logout"
+                        title="Sair">
+
+                        <svg
+                            class="sidebar-icon"
+                            viewBox="0 0 24 24"
+                            fill="none"
+                            stroke="currentColor"
+                            stroke-width="1.8"
+                            stroke-linecap="round"
+                            stroke-linejoin="round">
+
+                            <path d="M10 17l5-5-5-5"></path>
+
+                            <path d="M15 12H3"></path>
+
+                            <path
+                                d="M14 4h5a2 2 0 0 1 2 2v12a2 2 0 0 1-2 2h-5">
+                            </path>
+
+                        </svg>
+
+                        <span class="sidebar-text">
+                            Sair
+                        </span>
+
+                    </a>
+
+                </nav>
+
+            </div>
+
+
+            <!-- =================================================
+                 PROGRESSO
+            ================================================== -->
+
+            <div class="sidebar-progress">
+
+                <div class="flex justify-between items-center mb-3">
+
+                    <p class="text-sm text-slate-400">
+                        Progresso
+                    </p>
+
+                    <span class="text-cyan-300 text-sm font-semibold">
+                        75%
+                    </span>
+
+                </div>
+
+
+                <h2 class="text-3xl font-black">
+                    15/20
+                </h2>
+
+
+                <div
+                    class="w-full h-2
+                           bg-slate-700/50
+                           rounded-full
+                           mt-4
+                           overflow-hidden">
+
+                    <div
+                        class="h-full w-[75%]
+                               bg-gradient-to-r
+                               from-blue-500
+                               to-cyan-400
+                               rounded-full">
+                    </div>
+
+                </div>
+
+
+                <p class="text-slate-500 text-xs mt-3">
+                    Você está quase terminando
+                </p>
+
+            </div>
+
+        </aside>
+
+
+        <!-- =================================================
+             CONTEÚDO PRINCIPAL
+        ================================================== -->
+
+        <main
+            class="flex-1
+                   min-w-0
+                   p-4 md:p-8
+                   pt-24 lg:pt-8
+                   overflow-y-auto">
+
+
+            <!-- =================================================
+                 CABEÇALHO
+            ================================================== -->
+
+            <div class="mb-10">
+
+                <p class="text-cyan-300 font-medium mb-2">
+                    Sua conta
+                </p>
+
+
+                <h1
+                    class="text-3xl
+                           md:text-5xl
+                           font-black
+                           leading-tight">
+
+                    Meu
+
+                    <span
+                        class="bg-gradient-to-r
+                               from-blue-400
+                               to-cyan-300
+                               bg-clip-text
+                               text-transparent">
+
+                        perfil
+
+                    </span>
+
+                </h1>
+
+
+                <p class="text-slate-400 mt-3 max-w-2xl">
+                    Gerencie suas informações e acompanhe sua atividade no StudyFlow.
+                </p>
+
+            </div>
+
+
+            <!-- =================================================
+                 PERFIL PRINCIPAL
+            ================================================== -->
+
+            <section
+                class="bg-gradient-to-br
+                       from-blue-500/20
+                       via-cyan-400/10
+                       to-transparent
+                       backdrop-blur-xl
+                       border border-white/10
+                       rounded-3xl
+                       p-6 md:p-8
+                       shadow-2xl
+                       mb-8">
+
+                <div
+                    class="flex
+                           flex-col
+                           md:flex-row
+                           items-center
+                           md:items-start
+                           gap-6">
+
+
+                    <!-- AVATAR -->
+
+                    <div
+                        class="w-28
+                               h-28
+                               md:w-32
+                               md:h-32
+                               rounded-full
+                               bg-gradient-to-br
+                               from-blue-500
+                               to-cyan-400
+                               flex
+                               items-center
+                               justify-center
+                               shadow-2xl
+                               shadow-blue-500/20
+                               flex-shrink-0">
+
+                        <svg
+                            viewBox="0 0 24 24"
+                            width="58"
+                            height="58"
+                            fill="none"
+                            stroke="white"
+                            stroke-width="1.5"
+                            stroke-linecap="round"
+                            stroke-linejoin="round">
+
+                            <circle
+                                cx="12"
+                                cy="8"
+                                r="4">
+                            </circle>
+
+                            <path
+                                d="M4.5 21a7.5 7.5 0 0 1 15 0">
+                            </path>
+
+                        </svg>
+
+                    </div>
+
+
+                    <!-- DADOS PRINCIPAIS -->
+
+                    <div
+                        class="flex-1
+                               text-center
+                               md:text-left">
+
+                        <p
+                            class="text-sm
+                                   text-cyan-300
+                                   font-medium
+                                   mb-2">
+
+                            Usuário do StudyFlow
+
+                        </p>
+
+
+                        <h2
+                            id="perfilNome"
+                            class="text-3xl
+                                   md:text-4xl
+                                   font-black
+                                   break-words">
+
+                            Carregando...
+
+                        </h2>
+
+
+                        <p
+                            id="perfilEmail"
+                            class="text-slate-400
+                                   mt-2
+                                   break-all">
+
+                            Carregando...
+
+                        </p>
+
+
+                        <div
+                            class="flex
+                                   flex-wrap
+                                   justify-center
+                                   md:justify-start
+                                   gap-3
+                                   mt-5">
+
+                            <span
+                                class="px-4
+                                       py-2
+                                       rounded-full
+                                       bg-white/5
+                                       border border-white/10
+                                       text-sm
+                                       text-slate-300">
+
+                                Conta StudyFlow
+
+                            </span>
+
+
+                            <span
+                                class="px-4
+                                       py-2
+                                       rounded-full
+                                       bg-cyan-400/10
+                                       border border-cyan-400/20
+                                       text-sm
+                                       text-cyan-300">
+
+                                Estudante
+
+                            </span>
+
+                        </div>
+
+                    </div>
+
+
+                    <!-- BOTÃO -->
+
+                    <button
+                        id="btnEditarPerfil"
+                        type="button"
+                        class="w-full
+                               md:w-auto
+                               bg-white/5
+                               hover:bg-white/10
+                               border border-white/10
+                               px-6
+                               py-3
+                               rounded-2xl
+                               font-semibold
+                               transition
+                               duration-300">
+
+                        Editar perfil
+
+                    </button>
+
+                </div>
+
+            </section>
+
+
+            <!-- =================================================
+                 INFORMAÇÕES DA CONTA
+            ================================================== -->
+
+            <section class="mb-8">
+
+                <div class="mb-5">
+
+                    <p class="text-cyan-300 text-sm font-medium">
+                        Dados cadastrados
+                    </p>
+
+                    <h2
+                        class="text-2xl
+                               md:text-3xl
+                               font-black
+                               mt-1">
+
+                        Informações da conta
+
+                    </h2>
+
+                </div>
+
+
+                <div
+                    class="grid
+                           grid-cols-1
+                           md:grid-cols-2
+                           gap-5">
+
+
+                    <!-- NOME -->
+
+                    <div
+                        class="bg-white/5
+                               backdrop-blur-xl
+                               border border-white/10
+                               rounded-3xl
+                               p-6
+                               shadow-2xl">
+
+                        <div
+                            class="flex
+                                   items-center
+                                   gap-4">
+
+                            <div
+                                class="w-11
+                                       h-11
+                                       rounded-xl
+                                       bg-blue-500/15
+                                       flex
+                                       items-center
+                                       justify-center">
+
+                                <svg
+                                    viewBox="0 0 24 24"
+                                    width="22"
+                                    height="22"
+                                    fill="none"
+                                    stroke="currentColor"
+                                    stroke-width="1.8"
+                                    stroke-linecap="round"
+                                    stroke-linejoin="round">
+
+                                    <circle
+                                        cx="12"
+                                        cy="8"
+                                        r="4">
+                                    </circle>
+
+                                    <path
+                                        d="M4.5 21a7.5 7.5 0 0 1 15 0">
+                                    </path>
+
+                                </svg>
+
+                            </div>
+
+
+                            <div>
+
+                                <p class="text-sm text-slate-500">
+                                    Nome
+                                </p>
+
+                                <p
+                                    id="infoNome"
+                                    class="font-semibold text-lg break-words">
+
+                                    Carregando...
+
+                                </p>
+
+                            </div>
+
+                        </div>
+
+                    </div>
+
+
+                    <!-- E-MAIL -->
+
+                    <div
+                        class="bg-white/5
+                               backdrop-blur-xl
+                               border border-white/10
+                               rounded-3xl
+                               p-6
+                               shadow-2xl">
+
+                        <div
+                            class="flex
+                                   items-center
+                                   gap-4">
+
+                            <div
+                                class="w-11
+                                       h-11
+                                       rounded-xl
+                                       bg-cyan-500/15
+                                       flex
+                                       items-center
+                                       justify-center">
+
+                                <svg
+                                    viewBox="0 0 24 24"
+                                    width="22"
+                                    height="22"
+                                    fill="none"
+                                    stroke="currentColor"
+                                    stroke-width="1.8"
+                                    stroke-linecap="round"
+                                    stroke-linejoin="round">
+
+                                    <rect
+                                        x="3"
+                                        y="5"
+                                        width="18"
+                                        height="14"
+                                        rx="3">
+                                    </rect>
+
+                                    <path d="M3 7l9 6 9-6"></path>
+
+                                </svg>
+
+                            </div>
+
+
+                            <div>
+
+                                <p class="text-sm text-slate-500">
+                                    E-mail
+                                </p>
+
+                                <p
+                                    id="infoEmail"
+                                    class="font-semibold text-lg break-all">
+
+                                    Carregando...
+
+                                </p>
+
+                            </div>
+
+                        </div>
+
+                    </div>
+
+
+                    <!-- CONTA -->
+
+                    <div
+                        class="bg-white/5
+                               backdrop-blur-xl
+                               border border-white/10
+                               rounded-3xl
+                               p-6
+                               shadow-2xl">
+
+                        <div
+                            class="flex
+                                   items-center
+                                   gap-4">
+
+                            <div
+                                class="w-11
+                                       h-11
+                                       rounded-xl
+                                       bg-purple-500/15
+                                       flex
+                                       items-center
+                                       justify-center">
+
+                                <svg
+                                    viewBox="0 0 24 24"
+                                    width="22"
+                                    height="22"
+                                    fill="none"
+                                    stroke="currentColor"
+                                    stroke-width="1.8"
+                                    stroke-linecap="round"
+                                    stroke-linejoin="round">
+
+                                    <path
+                                        d="M12 3l8 4v5c0 5-3.5 8-8 9-4.5-1-8-4-8-9V7l8-4Z">
+                                    </path>
+
+                                    <path d="M9 12l2 2 4-4"></path>
+
+                                </svg>
+
+                            </div>
+
+
+                            <div>
+
+                                <p class="text-sm text-slate-500">
+                                    Status da conta
+                                </p>
+
+                                <p
+                                    class="font-semibold
+                                           text-lg
+                                           text-emerald-300">
+
+                                    Ativa
+
+                                </p>
+
+                            </div>
+
+                        </div>
+
+                    </div>
+
+
+                    <!-- PLATAFORMA -->
+
+                    <div
+                        class="bg-white/5
+                               backdrop-blur-xl
+                               border border-white/10
+                               rounded-3xl
+                               p-6
+                               shadow-2xl">
+
+                        <div
+                            class="flex
+                                   items-center
+                                   gap-4">
+
+                            <div
+                                class="w-11
+                                       h-11
+                                       rounded-xl
+                                       bg-blue-500/15
+                                       flex
+                                       items-center
+                                       justify-center">
+
+                                <svg
+                                    viewBox="0 0 24 24"
+                                    width="22"
+                                    height="22"
+                                    fill="none"
+                                    stroke="currentColor"
+                                    stroke-width="1.8"
+                                    stroke-linecap="round"
+                                    stroke-linejoin="round">
+
+                                    <rect
+                                        x="3"
+                                        y="4"
+                                        width="18"
+                                        height="16"
+                                        rx="3">
+                                    </rect>
+
+                                    <path d="M8 8h8"></path>
+
+                                    <path d="M8 12h5"></path>
+
+                                    <path d="M8 16h3"></path>
+
+                                </svg>
+
+                            </div>
+
+
+                            <div>
+
+                                <p class="text-sm text-slate-500">
+                                    Plataforma
+                                </p>
+
+                                <p class="font-semibold text-lg">
+                                    StudyFlow
+                                </p>
+
+                            </div>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </section>
+
+
+            <!-- =================================================
+                 ATIVIDADE
+            ================================================== -->
+
+            <section class="mb-8">
+
+                <div class="mb-5">
+
+                    <p class="text-cyan-300 text-sm font-medium">
+                        Seu desempenho
+                    </p>
+
+                    <h2
+                        class="text-2xl
+                               md:text-3xl
+                               font-black
+                               mt-1">
+
+                        Sua atividade
+
+                    </h2>
+
+                </div>
+
+
+                <div
+                    class="grid
+                           grid-cols-1
+                           sm:grid-cols-2
+                           lg:grid-cols-3
+                           gap-5">
+
+
+                    <!-- TAREFAS -->
+
+                    <div
+                        class="bg-gradient-to-br
+                               from-blue-500/20
+                               to-cyan-400/10
+                               backdrop-blur-xl
+                               border border-white/10
+                               rounded-3xl
+                               p-6
+                               shadow-2xl">
+
+                        <div
+                            class="w-12
+                                   h-12
+                                   rounded-2xl
+                                   bg-blue-500/15
+                                   flex
+                                   items-center
+                                   justify-center
+                                   mb-5">
+
+                            <svg
+                                viewBox="0 0 24 24"
+                                width="24"
+                                height="24"
+                                fill="none"
+                                stroke="currentColor"
+                                stroke-width="1.8"
+                                stroke-linecap="round"
+                                stroke-linejoin="round">
+
+                                <rect
+                                    x="4"
+                                    y="3"
+                                    width="16"
+                                    height="18"
+                                    rx="3">
+                                </rect>
+
+                                <path d="M8 8h.01"></path>
+
+                                <path d="M11 8h5"></path>
+
+                                <path d="M8 13l1.5 1.5L12 12"></path>
+
+                                <path d="M14 13h2"></path>
+
+                            </svg>
+
+                        </div>
+
+
+                        <p class="text-slate-400 text-sm">
+                            Tarefas cadastradas
+                        </p>
+
+
+                        <h3
+                            id="totalTarefasPerfil"
+                            class="text-4xl font-black mt-2">
+
+                            0
+
+                        </h3>
+
+                    </div>
+
+
+                    <!-- EVENTOS -->
+
+                    <div
+                        class="bg-gradient-to-br
+                               from-purple-500/20
+                               to-pink-400/10
+                               backdrop-blur-xl
+                               border border-white/10
+                               rounded-3xl
+                               p-6
+                               shadow-2xl">
+
+                        <div
+                            class="w-12
+                                   h-12
+                                   rounded-2xl
+                                   bg-purple-500/15
+                                   flex
+                                   items-center
+                                   justify-center
+                                   mb-5">
+
+                            <svg
+                                viewBox="0 0 24 24"
+                                width="24"
+                                height="24"
+                                fill="none"
+                                stroke="currentColor"
+                                stroke-width="1.8"
+                                stroke-linecap="round"
+                                stroke-linejoin="round">
+
+                                <rect
+                                    x="3"
+                                    y="5"
+                                    width="18"
+                                    height="16"
+                                    rx="3">
+                                </rect>
+
+                                <path d="M16 3v4"></path>
+
+                                <path d="M8 3v4"></path>
+
+                                <path d="M3 10h18"></path>
+
+                            </svg>
+
+                        </div>
+
+
+                        <p class="text-slate-400 text-sm">
+                            Eventos cadastrados
+                        </p>
+
+
+                        <h3
+                            id="totalEventosPerfil"
+                            class="text-4xl font-black mt-2">
+
+                            0
+
+                        </h3>
+
+                    </div>
+
+
+                    <!-- PROGRESSO -->
+
+                    <div
+                        class="bg-gradient-to-br
+                               from-cyan-500/20
+                               to-blue-500/10
+                               backdrop-blur-xl
+                               border border-white/10
+                               rounded-3xl
+                               p-6
+                               shadow-2xl">
+
+                        <div
+                            class="w-12
+                                   h-12
+                                   rounded-2xl
+                                   bg-cyan-500/15
+                                   flex
+                                   items-center
+                                   justify-center
+                                   mb-5">
+
+                            <svg
+                                viewBox="0 0 24 24"
+                                width="24"
+                                height="24"
+                                fill="none"
+                                stroke="currentColor"
+                                stroke-width="1.8"
+                                stroke-linecap="round"
+                                stroke-linejoin="round">
+
+                                <path d="M4 19V5"></path>
+
+                                <path d="M4 19h16"></path>
+
+                                <path d="M7 15l3-4 3 2 5-7"></path>
+
+                            </svg>
+
+                        </div>
+
+
+                        <p class="text-slate-400 text-sm">
+                            Progresso geral
+                        </p>
+
+
+                        <h3
+                            id="progressoPerfil"
+                            class="text-4xl font-black mt-2">
+
+                            0%
+
+                        </h3>
+
+                    </div>
+
+                </div>
+
+            </section>
+
+
+            <!-- =================================================
+                 MODAL EDITAR PERFIL
+            ================================================== -->
+
+            <div
+                id="modalPerfil"
+                class="hidden
+                       fixed
+                       inset-0
+                       z-[200]
+                       bg-black/60
+                       backdrop-blur-sm
+                       items-center
+                       justify-center
+                       p-4">
+
+
+                <div
+                    class="w-full
+                           max-w-lg
+                           bg-slate-900
+                           border border-white/10
+                           rounded-3xl
+                           shadow-2xl
+                           p-6 md:p-8">
+
+
+                    <div
+                        class="flex
+                               items-center
+                               justify-between
+                               mb-6">
+
+                        <div>
+
+                            <p
+                                class="text-cyan-300
+                                       text-sm
+                                       font-medium">
+
+                                Configurações
+
+                            </p>
+
+                            <h2 class="text-2xl font-black">
+                                Editar perfil
+                            </h2>
+
+                        </div>
+
+
+                        <button
+                            id="btnFecharModalPerfil"
+                            type="button"
+                            aria-label="Fechar"
+                            class="w-10
+                                   h-10
+                                   rounded-xl
+                                   bg-white/5
+                                   hover:bg-white/10
+                                   border border-white/10
+                                   flex
+                                   items-center
+                                   justify-center
+                                   transition">
+
+                            <svg
+                                viewBox="0 0 24 24"
+                                width="20"
+                                height="20"
+                                fill="none"
+                                stroke="currentColor"
+                                stroke-width="1.8"
+                                stroke-linecap="round">
+
+                                <path d="M6 6l12 12"></path>
+
+                                <path d="M18 6L6 18"></path>
+
+                            </svg>
+
+                        </button>
+
+                    </div>
+
+
+                    <!-- NOME -->
+
+                    <label
+                        for="editarNome"
+                        class="block text-sm text-slate-400 mb-2">
+
+                        Nome
+
+                    </label>
+
+                    <input
+                        id="editarNome"
+                        type="text"
+                        class="w-full
+                               bg-white/5
+                               border border-white/10
+                               focus:border-cyan-400/50
+                               outline-none
+                               rounded-2xl
+                               px-4
+                               py-3
+                               mb-5
+                               text-slate-100"
+                        placeholder="Seu nome">
+
+
+                    <!-- E-MAIL -->
+
+                    <label
+                        for="editarEmail"
+                        class="block text-sm text-slate-400 mb-2">
+
+                        E-mail
+
+                    </label>
+
+                    <input
+                        id="editarEmail"
+                        type="email"
+                        class="w-full
+                               bg-white/5
+                               border border-white/10
+                               focus:border-cyan-400/50
+                               outline-none
+                               rounded-2xl
+                               px-4
+                               py-3
+                               mb-6
+                               text-slate-100"
+                        placeholder="seu@email.com">
+
+
+                    <div
+                        class="flex
+                               flex-col
+                               sm:flex-row
+                               gap-3
+                               justify-end">
+
+                        <button
+                            id="btnCancelarPerfil"
+                            type="button"
+                            class="px-6
+                                   py-3
+                                   rounded-2xl
+                                   bg-white/5
+                                   hover:bg-white/10
+                                   border border-white/10
+                                   font-semibold
+                                   transition">
+
+                            Cancelar
+
+                        </button>
+
+
+                        <button
+                            id="btnSalvarPerfil"
+                            type="button"
+                            class="px-6
+                                   py-3
+                                   rounded-2xl
+                                   bg-gradient-to-r
+                                   from-blue-500
+                                   to-cyan-400
+                                   font-bold
+                                   transition
+                                   hover:scale-[1.02]">
+
+                            Salvar alterações
+
+                        </button>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </main>
+
+    </div>
+
+
+    <!-- =====================================================
+         SCRIPTS
+    ====================================================== -->
+
+    <script src="../js/auth.js"></script>
+
+
+    <script>
+
+        /* =================================================
+           USUÁRIO LOGADO
+        ================================================== */
+
+        const usuarioSalvo =
+            localStorage.getItem("usuarioLogado");
+
+
+        let usuario = null;
+
+
+        try {
+
+            usuario =
+                usuarioSalvo
+                    ? JSON.parse(usuarioSalvo)
+                    : null;
+
+        } catch (erro) {
+
+            usuario = null;
+
+        }
+
+
+        function obterNomeUsuario() {
+
+            if (!usuario) {
+                return "Usuário";
+            }
+
+            return (
+                usuario.nome ||
+                usuario.name ||
+                usuario.usuario ||
+                usuario.username ||
+                "Usuário"
+            );
+
+        }
+
+
+        function obterEmailUsuario() {
+
+            if (!usuario) {
+                return "E-mail não informado";
+            }
+
+            return (
+                usuario.email ||
+                usuario.emailUsuario ||
+                "E-mail não informado"
+            );
+
+        }
+
+
+        /* =================================================
+           PREENCHER PERFIL
+        ================================================== */
+
+        function carregarPerfil() {
+
+            const nome =
+                obterNomeUsuario();
+
+            const email =
+                obterEmailUsuario();
+
+
+            document.getElementById(
+                "perfilNome"
+            ).textContent = nome;
+
+
+            document.getElementById(
+                "perfilEmail"
+            ).textContent = email;
+
+
+            document.getElementById(
+                "infoNome"
+            ).textContent = nome;
+
+
+            document.getElementById(
+                "infoEmail"
+            ).textContent = email;
+
+
+            document.getElementById(
+                "editarNome"
+            ).value =
+                nome === "Usuário"
+                    ? ""
+                    : nome;
+
+
+            document.getElementById(
+                "editarEmail"
+            ).value =
+                email === "E-mail não informado"
+                    ? ""
+                    : email;
+
+        }
+
+
+        /* =================================================
+           ESTATÍSTICAS
+        ================================================== */
+
+        function carregarEstatisticas() {
+
+            let tarefas = [];
+
+            let eventos = [];
+
+
+            try {
+
+                tarefas =
+                    JSON.parse(
+                        localStorage.getItem(
+                            "tarefasStudyFlow"
+                        )
+                    ) || [];
+
+            } catch (erro) {
+
+                tarefas = [];
+
+            }
+
+
+            try {
+
+                eventos =
+                    JSON.parse(
+                        localStorage.getItem(
+                            "eventosStudyFlow"
+                        )
+                    ) || [];
+
+            } catch (erro) {
+
+                eventos = [];
+
+            }
+
+
+            const totalTarefas =
+                Array.isArray(tarefas)
+                    ? tarefas.length
+                    : 0;
+
+
+            const totalEventos =
+                Array.isArray(eventos)
+                    ? eventos.length
+                    : 0;
+
+
+            const progresso =
+                totalTarefas > 0
+                    ? Math.min(
+                        100,
+                        Math.round(
+                            (
+                                tarefas.filter(
+                                    tarefa =>
+                                        tarefa.concluida === true ||
+                                        tarefa.completed === true ||
+                                        tarefa.status === "concluida"
+                                ).length
+                                /
+                                totalTarefas
+                            ) * 100
+                        )
+                    )
+                    : 0;
+
+
+            document.getElementById(
+                "totalTarefasPerfil"
+            ).textContent =
+                totalTarefas;
+
+
+            document.getElementById(
+                "totalEventosPerfil"
+            ).textContent =
+                totalEventos;
+
+
+            document.getElementById(
+                "progressoPerfil"
+            ).textContent =
+                progresso + "%";
+
+        }
+
+
+        /* =================================================
+           MODAL
+        ================================================== */
+
+        const modalPerfil =
+            document.getElementById(
+                "modalPerfil"
+            );
+
+
+        const btnEditarPerfil =
+            document.getElementById(
+                "btnEditarPerfil"
+            );
+
+
+        const btnFecharModalPerfil =
+            document.getElementById(
+                "btnFecharModalPerfil"
+            );
+
+
+        const btnCancelarPerfil =
+            document.getElementById(
+                "btnCancelarPerfil"
+            );
+
+
+        const btnSalvarPerfil =
+            document.getElementById(
+                "btnSalvarPerfil"
+            );
+
+
+        function abrirModalPerfil() {
+
+            modalPerfil.classList.remove(
+                "hidden"
+            );
+
+            modalPerfil.classList.add(
+                "flex"
+            );
+
+        }
+
+
+        function fecharModalPerfil() {
+
+            modalPerfil.classList.add(
+                "hidden"
+            );
+
+            modalPerfil.classList.remove(
+                "flex"
+            );
+
+        }
+
+
+        btnEditarPerfil.addEventListener(
+            "click",
+            abrirModalPerfil
+        );
+
+
+        btnFecharModalPerfil.addEventListener(
+            "click",
+            fecharModalPerfil
+        );
+
+
+        btnCancelarPerfil.addEventListener(
+            "click",
+            fecharModalPerfil
+        );
+
+
+        modalPerfil.addEventListener(
+            "click",
+            (evento) => {
+
+                if (
+                    evento.target === modalPerfil
+                ) {
+
+                    fecharModalPerfil();
+
+                }
+
+            }
+        );
+
+
+        /* =================================================
+           SALVAR ALTERAÇÕES
+        ================================================== */
+
+        btnSalvarPerfil.addEventListener(
+            "click",
+            () => {
+
+                const novoNome =
+                    document.getElementById(
+                        "editarNome"
+                    ).value.trim();
+
+
+                const novoEmail =
+                    document.getElementById(
+                        "editarEmail"
+                    ).value.trim();
+
+
+                if (!novoNome) {
+
+                    alert(
+                        "Digite seu nome."
+                    );
+
+                    return;
+
+                }
+
+
+                if (!novoEmail) {
+
+                    alert(
+                        "Digite seu e-mail."
+                    );
+
+                    return;
+
+                }
+
+
+                if (!usuario) {
+
+                    usuario = {};
+
+                }
+
+
+                usuario.nome =
+                    novoNome;
+
+
+                usuario.email =
+                    novoEmail;
+
+
+                localStorage.setItem(
+                    "usuarioLogado",
+                    JSON.stringify(usuario)
+                );
+
+
+                carregarPerfil();
+
+
+                fecharModalPerfil();
+
+            }
+        );
+
+
+        /* =================================================
+           MENU MOBILE
+        ================================================== */
+
+        const btnMenuPerfil =
+            document.getElementById(
+                "btnMenuPerfil"
+            );
+
+
+        const sidebarPerfil =
+            document.getElementById(
+                "sidebarMaterias"
+            );
+
+
+        if (
+            btnMenuPerfil &&
+            sidebarPerfil
+        ) {
+
+            btnMenuPerfil.addEventListener(
+                "click",
+                () => {
+
+                    sidebarPerfil.classList.toggle(
+                        "mobile-open"
+                    );
+
+                }
+            );
+
+        }
+
+
+        /* =================================================
+           INICIALIZAÇÃO
+        ================================================== */
+
+        carregarPerfil();
+
+        carregarEstatisticas();
+
+    </script>
+
+</body>
+
+</html>

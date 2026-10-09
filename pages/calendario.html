@@ -1,0 +1,1269 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Calendário | StudyFlow</title>
+
+    <script src="https://cdn.tailwindcss.com"></script>
+
+    <link rel="stylesheet" href="../css/style.css">
+    <link rel="stylesheet" href="../css/responsive.css">
+</head>
+
+<body
+    class="bg-gradient-to-br from-slate-950 via-slate-900 to-slate-950 min-h-screen text-slate-100 font-sans overflow-x-hidden">
+
+    <!-- GLOW -->
+
+    <div
+        class="fixed top-0 left-0 w-96 h-96 bg-blue-500/10 blur-3xl rounded-full pointer-events-none">
+    </div>
+
+    <div
+        class="fixed bottom-0 right-0 w-96 h-96 bg-cyan-500/10 blur-3xl rounded-full pointer-events-none">
+    </div>
+
+
+    <!-- ========================================
+         LAYOUT
+    ======================================== -->
+
+    <div class="flex min-h-screen relative z-10">
+
+
+        <!-- ========================================
+             MENU MOBILE
+        ======================================== -->
+
+        <div
+            class="lg:hidden fixed top-0 left-0 right-0 z-50
+                   flex items-center justify-between
+                   p-4
+                   bg-slate-950/90
+                   backdrop-blur-xl
+                   border-b border-white/10">
+
+            <div class="flex items-center gap-3">
+
+                <img
+                    src="../assets/StudyFlow.2.png"
+                    alt="StudyFlow"
+                    class="mobile-brand-logo">
+
+            </div>
+
+
+            <button
+                id="btnMenuCalendario"
+                type="button"
+                aria-label="Abrir menu"
+                class="w-11 h-11
+                       flex items-center justify-center
+                       bg-white/5
+                       hover:bg-white/10
+                       border border-white/10
+                       rounded-xl
+                       transition">
+
+                <svg
+                    viewBox="0 0 24 24"
+                    width="22"
+                    height="22"
+                    fill="none"
+                    stroke="currentColor"
+                    stroke-width="1.8"
+                    stroke-linecap="round">
+
+                    <path d="M4 6h16"></path>
+                    <path d="M4 12h16"></path>
+                    <path d="M4 18h16"></path>
+
+                </svg>
+
+            </button>
+
+        </div>
+
+
+        <!-- ========================================
+             SIDEBAR
+        ======================================== -->
+
+        <aside
+            id="sidebarCalendario"
+            class="hidden lg:flex
+                   sidebar-desktop
+                   bg-slate-950/90
+                   backdrop-blur-xl
+                   border-r border-white/10
+                   flex-col
+                   justify-between
+                   min-h-screen">
+
+
+            <!-- ====================================
+                 PARTE SUPERIOR
+            ==================================== -->
+
+            <div class="sidebar-content">
+
+
+                <!-- ====================================
+                     LOGOS
+                ==================================== -->
+
+                <div class="brand-container">
+
+                    <!-- Logo S - sidebar fechada -->
+
+                    <img
+                        src="../assets/StudyFlow.png"
+                        alt="StudyFlow"
+                        class="brand-logo-collapsed">
+
+
+                    <!-- Logo completa - sidebar aberta -->
+
+                    <img
+                        src="../assets/StudyFlow.2.png"
+                        alt="StudyFlow"
+                        class="brand-logo-expanded">
+
+                </div>
+
+
+                <!-- ====================================
+                     NAVEGAÇÃO
+                ==================================== -->
+
+                <nav class="sidebar-nav">
+
+
+                    <!-- DASHBOARD -->
+
+                    <a
+                        href="dashboard.html"
+                        class="sidebar-link"
+                        title="Dashboard">
+
+                        <svg
+                            class="sidebar-icon"
+                            viewBox="0 0 24 24"
+                            fill="none"
+                            stroke="currentColor"
+                            stroke-width="1.8"
+                            stroke-linecap="round"
+                            stroke-linejoin="round">
+
+                            <path d="M3 11.5L12 4l9 7.5"></path>
+                            <path d="M5.5 10v9h13v-9"></path>
+                            <path d="M9.5 19v-5h5v5"></path>
+
+                        </svg>
+
+                        <span class="sidebar-text">
+                            Dashboard
+                        </span>
+
+                    </a>
+
+
+                    <!-- TAREFAS -->
+
+                    <a
+                        href="tarefas.html"
+                        class="sidebar-link"
+                        title="Tarefas">
+
+                        <svg
+                            class="sidebar-icon"
+                            viewBox="0 0 24 24"
+                            fill="none"
+                            stroke="currentColor"
+                            stroke-width="1.8"
+                            stroke-linecap="round"
+                            stroke-linejoin="round">
+
+                            <rect
+                                x="4"
+                                y="3"
+                                width="16"
+                                height="18"
+                                rx="3">
+                            </rect>
+
+                            <path d="M8 8h.01"></path>
+                            <path d="M11 8h5"></path>
+
+                            <path d="M8 13l1.5 1.5L12 12"></path>
+                            <path d="M14 13h2"></path>
+
+                        </svg>
+
+                        <span class="sidebar-text">
+                            Tarefas
+                        </span>
+
+                    </a>
+
+
+                    <!-- CALENDÁRIO -->
+
+                    <a
+                        href="calendario.html"
+                        class="sidebar-link sidebar-link-active"
+                        title="Calendário">
+
+                        <svg
+                            class="sidebar-icon"
+                            viewBox="0 0 24 24"
+                            fill="none"
+                            stroke="currentColor"
+                            stroke-width="1.8"
+                            stroke-linecap="round"
+                            stroke-linejoin="round">
+
+                            <rect
+                                x="3"
+                                y="5"
+                                width="18"
+                                height="16"
+                                rx="3">
+                            </rect>
+
+                            <path d="M16 3v4"></path>
+                            <path d="M8 3v4"></path>
+
+                            <path d="M3 10h18"></path>
+
+                            <path d="M8 14h.01"></path>
+                            <path d="M12 14h.01"></path>
+                            <path d="M16 14h.01"></path>
+
+                        </svg>
+
+                        <span class="sidebar-text">
+                            Calendário
+                        </span>
+
+                    </a>
+
+
+                    <!-- POMODORO -->
+
+                    <a
+                        href="pomodoro.html"
+                        class="sidebar-link"
+                        title="Pomodoro">
+
+                        <svg
+                            class="sidebar-icon"
+                            viewBox="0 0 24 24"
+                            fill="none"
+                            stroke="currentColor"
+                            stroke-width="1.8"
+                            stroke-linecap="round"
+                            stroke-linejoin="round">
+
+                            <circle
+                                cx="12"
+                                cy="13"
+                                r="7">
+                            </circle>
+
+                            <path d="M12 9v4l2.5 1.5"></path>
+                            <path d="M9 3h6"></path>
+                            <path d="M12 3v2"></path>
+
+                        </svg>
+
+                        <span class="sidebar-text">
+                            Pomodoro
+                        </span>
+
+                    </a>
+
+
+                    <!-- STUDYFLOW AI -->
+
+                    <a
+                        href="ia.html"
+                        class="sidebar-link"
+                        title="StudyFlow AI">
+
+                        <svg
+                            class="sidebar-icon"
+                            viewBox="0 0 24 24"
+                            fill="none"
+                            stroke="currentColor"
+                            stroke-width="1.8"
+                            stroke-linecap="round"
+                            stroke-linejoin="round">
+
+                            <path d="M12 3l1.8 5.2L19 10l-5.2 1.8L12 17l-1.8-5.2L5 10l5.2-1.8L12 3z"></path>
+
+                            <path d="M19 15l.7 2.3L22 18l-2.3.7L19 21l-.7-2.3L16 18l2.3-.7L19 15z"></path>
+
+                        </svg>
+
+                        <span class="sidebar-text">
+                            StudyFlow AI
+                        </span>
+
+                    </a>
+
+
+                    <!-- MEU PERFIL -->
+
+                    <a
+                        href="materias.html"
+                        class="sidebar-link"
+                        title="Meu Perfil">
+
+                        <svg
+                            class="sidebar-icon"
+                            viewBox="0 0 24 24"
+                            fill="none"
+                            stroke="currentColor"
+                            stroke-width="1.8"
+                            stroke-linecap="round"
+                            stroke-linejoin="round">
+
+                            <circle
+                                cx="12"
+                                cy="8"
+                                r="3.5">
+                            </circle>
+
+                            <path
+                                d="M5 20c.8-3.3 3.3-5 7-5s6.2 1.7 7 5">
+                            </path>
+
+                        </svg>
+
+                        <span class="sidebar-text">
+                            Meu Perfil
+                        </span>
+
+                    </a>
+
+
+                    <!-- SAIR -->
+
+                    <a
+                        href="#"
+                        id="btnLogout"
+                        class="sidebar-link sidebar-link-logout"
+                        title="Sair">
+
+                        <svg
+                            class="sidebar-icon"
+                            viewBox="0 0 24 24"
+                            fill="none"
+                            stroke="currentColor"
+                            stroke-width="1.8"
+                            stroke-linecap="round"
+                            stroke-linejoin="round">
+
+                            <path d="M10 17l5-5-5-5"></path>
+                            <path d="M15 12H3"></path>
+
+                            <path
+                                d="M14 4h5a2 2 0 0 1 2 2v12a2 2 0 0 1-2 2h-5">
+                            </path>
+
+                        </svg>
+
+                        <span class="sidebar-text">
+                            Sair
+                        </span>
+
+                    </a>
+
+                </nav>
+
+            </div>
+
+
+            <!-- ========================================
+                 PROGRESSO
+            ======================================== -->
+
+            <div class="sidebar-progress">
+
+                <div class="flex justify-between items-center mb-3">
+
+                    <p class="text-sm text-slate-400">
+                        Progresso
+                    </p>
+
+                    <span class="text-cyan-300 text-sm font-semibold">
+                        75%
+                    </span>
+
+                </div>
+
+
+                <h2 class="text-3xl font-black">
+                    15/20
+                </h2>
+
+
+                <div
+                    class="w-full h-2
+                           bg-slate-700/50
+                           rounded-full
+                           mt-4
+                           overflow-hidden">
+
+                    <div
+                        class="h-full w-[75%]
+                               bg-gradient-to-r
+                               from-blue-500
+                               to-cyan-400
+                               rounded-full">
+                    </div>
+
+                </div>
+
+
+                <p class="text-slate-500 text-xs mt-3">
+                    Você está quase terminando
+                </p>
+
+            </div>
+
+        </aside>
+
+
+        <!-- ========================================
+             CONTEÚDO PRINCIPAL
+        ======================================== -->
+
+        <main
+            class="flex-1
+                   min-w-0
+                   p-4 md:p-8
+                   pt-24 lg:pt-8
+                   overflow-y-auto">
+
+
+            <!-- CABEÇALHO -->
+
+            <div
+                class="flex
+                       items-center
+                       justify-between
+                       mb-10
+                       flex-wrap
+                       gap-4">
+
+                <div>
+
+                    <p class="text-cyan-300 font-medium mb-2">
+                        Organize seus estudos
+                    </p>
+
+                    <h1
+                        class="text-3xl
+                               md:text-5xl
+                               font-black
+                               leading-tight">
+
+                        Seu
+
+                        <span
+                            class="bg-gradient-to-r
+                                   from-blue-400
+                                   to-cyan-300
+                                   bg-clip-text
+                                   text-transparent">
+
+                            calendário
+
+                        </span>
+
+                    </h1>
+
+                </div>
+
+
+                <!-- NOVO EVENTO -->
+
+                <button
+                    id="btnNovoEvento"
+                    type="button"
+                    class="w-full
+                           sm:w-auto
+                           bg-gradient-to-r
+                           from-blue-500
+                           to-cyan-400
+                           hover:scale-[1.02]
+                           transition
+                           duration-300
+                           px-7
+                           py-4
+                           rounded-2xl
+                           font-bold
+                           shadow-2xl
+                           shadow-blue-500/20">
+
+                    + Novo evento
+
+                </button>
+
+            </div>
+
+
+            <!-- ========================================
+                 CALENDÁRIO
+            ======================================== -->
+
+            <section
+                class="bg-white/5
+                       backdrop-blur-xl
+                       border border-white/10
+                       rounded-3xl
+                       p-5 md:p-8
+                       shadow-2xl
+                       mb-8">
+
+
+                <!-- CABEÇALHO DO MÊS -->
+
+                <div
+                    class="flex
+                           items-center
+                           justify-between
+                           gap-4
+                           mb-8
+                           flex-wrap">
+
+                    <div>
+
+                        <h2 class="text-2xl md:text-3xl font-black">
+                            Maio 2026
+                        </h2>
+
+                        <p class="text-slate-400 mt-1">
+                            Organize seus compromissos e estudos
+                        </p>
+
+                    </div>
+
+
+                    <div class="flex gap-2">
+
+                        <button
+                            type="button"
+                            class="w-10 h-10
+                                   rounded-xl
+                                   bg-white/5
+                                   hover:bg-white/10
+                                   border border-white/10
+                                   flex items-center justify-center
+                                   transition">
+
+                            ←
+
+                        </button>
+
+                        <button
+                            type="button"
+                            class="w-10 h-10
+                                   rounded-xl
+                                   bg-white/5
+                                   hover:bg-white/10
+                                   border border-white/10
+                                   flex items-center justify-center
+                                   transition">
+
+                            →
+
+                        </button>
+
+                    </div>
+
+                </div>
+
+
+                <!-- DIAS DA SEMANA -->
+
+                <div
+                    class="grid
+                           grid-cols-7
+                           gap-2
+                           mb-2">
+
+                    <div class="text-center text-slate-500 text-sm font-semibold p-2">
+                        Dom
+                    </div>
+
+                    <div class="text-center text-slate-500 text-sm font-semibold p-2">
+                        Seg
+                    </div>
+
+                    <div class="text-center text-slate-500 text-sm font-semibold p-2">
+                        Ter
+                    </div>
+
+                    <div class="text-center text-slate-500 text-sm font-semibold p-2">
+                        Qua
+                    </div>
+
+                    <div class="text-center text-slate-500 text-sm font-semibold p-2">
+                        Qui
+                    </div>
+
+                    <div class="text-center text-slate-500 text-sm font-semibold p-2">
+                        Sex
+                    </div>
+
+                    <div class="text-center text-slate-500 text-sm font-semibold p-2">
+                        Sáb
+                    </div>
+
+                </div>
+
+
+                <!-- DIAS -->
+
+                <div
+                    class="grid
+                           grid-cols-7
+                           gap-2">
+
+
+                    <!-- DIAS ANTERIORES -->
+
+                    <div class="min-h-24 p-2 rounded-2xl bg-white/[0.02] text-slate-700">
+                        26
+                    </div>
+
+                    <div class="min-h-24 p-2 rounded-2xl bg-white/[0.02] text-slate-700">
+                        27
+                    </div>
+
+                    <div class="min-h-24 p-2 rounded-2xl bg-white/[0.02] text-slate-700">
+                        28
+                    </div>
+
+                    <div class="min-h-24 p-2 rounded-2xl bg-white/[0.02] text-slate-700">
+                        29
+                    </div>
+
+                    <div class="min-h-24 p-2 rounded-2xl bg-white/[0.02] text-slate-700">
+                        30
+                    </div>
+
+
+                    <!-- 1 -->
+
+                    <div
+                        class="min-h-24
+                               p-2
+                               rounded-2xl
+                               bg-white/5
+                               border border-white/10
+                               hover:border-blue-400/40
+                               transition">
+
+                        <span class="font-semibold">
+                            1
+                        </span>
+
+                    </div>
+
+
+                    <!-- 2 -->
+
+                    <div
+                        class="min-h-24
+                               p-2
+                               rounded-2xl
+                               bg-white/5
+                               border border-white/10
+                               hover:border-blue-400/40
+                               transition">
+
+                        <span class="font-semibold">
+                            2
+                        </span>
+
+                    </div>
+
+
+                    <!-- 3 -->
+
+                    <div
+                        class="min-h-24
+                               p-2
+                               rounded-2xl
+                               bg-white/5
+                               border border-white/10">
+
+                        <span class="font-semibold">
+                            3
+                        </span>
+
+                    </div>
+
+
+                    <!-- 4 -->
+
+                    <div
+                        class="min-h-24
+                               p-2
+                               rounded-2xl
+                               bg-white/5
+                               border border-white/10">
+
+                        <span class="font-semibold">
+                            4
+                        </span>
+
+                    </div>
+
+
+                    <!-- 5 -->
+
+                    <div
+                        class="min-h-24
+                               p-2
+                               rounded-2xl
+                               bg-white/5
+                               border border-white/10">
+
+                        <span class="font-semibold">
+                            5
+                        </span>
+
+                    </div>
+
+
+                    <!-- 6 -->
+
+                    <div
+                        class="min-h-24
+                               p-2
+                               rounded-2xl
+                               bg-blue-500/10
+                               border border-blue-400/30">
+
+                        <div class="flex justify-between">
+
+                            <span class="font-bold text-blue-300">
+                                6
+                            </span>
+
+                        </div>
+
+                        <div
+                            class="mt-2
+                                   text-xs
+                                   bg-blue-500/20
+                                   text-blue-300
+                                   rounded-lg
+                                   px-2
+                                   py-1">
+
+                            Matemática
+
+                        </div>
+
+                    </div>
+
+
+                    <!-- 7 -->
+
+                    <div
+                        class="min-h-24
+                               p-2
+                               rounded-2xl
+                               bg-white/5
+                               border border-white/10">
+
+                        <span class="font-semibold">
+                            7
+                        </span>
+
+                    </div>
+
+
+                    <!-- 8 -->
+
+                    <div
+                        class="min-h-24
+                               p-2
+                               rounded-2xl
+                               bg-white/5
+                               border border-white/10">
+
+                        <span class="font-semibold">
+                            8
+                        </span>
+
+                    </div>
+
+
+                    <!-- 9 -->
+
+                    <div
+                        class="min-h-24
+                               p-2
+                               rounded-2xl
+                               bg-white/5
+                               border border-white/10">
+
+                        <span class="font-semibold">
+                            9
+                        </span>
+
+                    </div>
+
+
+                    <!-- 10 -->
+
+                    <div
+                        class="min-h-24
+                               p-2
+                               rounded-2xl
+                               bg-white/5
+                               border border-white/10">
+
+                        <span class="font-semibold">
+                            10
+                        </span>
+
+                    </div>
+
+
+                    <!-- 11 -->
+
+                    <div
+                        class="min-h-24
+                               p-2
+                               rounded-2xl
+                               bg-white/5
+                               border border-white/10">
+
+                        <span class="font-semibold">
+                            11
+                        </span>
+
+                    </div>
+
+
+                    <!-- 12 -->
+
+                    <div
+                        class="min-h-24
+                               p-2
+                               rounded-2xl
+                               bg-white/5
+                               border border-white/10">
+
+                        <span class="font-semibold">
+                            12
+                        </span>
+
+                    </div>
+
+
+                    <!-- 13 -->
+
+                    <div
+                        class="min-h-24
+                               p-2
+                               rounded-2xl
+                               bg-white/5
+                               border border-white/10">
+
+                        <span class="font-semibold">
+                            13
+                        </span>
+
+                    </div>
+
+
+                    <!-- 14 -->
+
+                    <div
+                        class="min-h-24
+                               p-2
+                               rounded-2xl
+                               bg-white/5
+                               border border-white/10">
+
+                        <span class="font-semibold">
+                            14
+                        </span>
+
+                    </div>
+
+
+                    <!-- 15 -->
+
+                    <div
+                        class="min-h-24
+                               p-2
+                               rounded-2xl
+                               bg-white/5
+                               border border-white/10">
+
+                        <span class="font-semibold">
+                            15
+                        </span>
+
+                    </div>
+
+
+                    <!-- 16 -->
+
+                    <div
+                        class="min-h-24
+                               p-2
+                               rounded-2xl
+                               bg-white/5
+                               border border-white/10">
+
+                        <span class="font-semibold">
+                            16
+                        </span>
+
+                    </div>
+
+
+                    <!-- 17 -->
+
+                    <div
+                        class="min-h-24
+                               p-2
+                               rounded-2xl
+                               bg-white/5
+                               border border-white/10">
+
+                        <span class="font-semibold">
+                            17
+                        </span>
+
+                    </div>
+
+
+                    <!-- 18 -->
+
+                    <div
+                        class="min-h-24
+                               p-2
+                               rounded-2xl
+                               bg-white/5
+                               border border-white/10">
+
+                        <span class="font-semibold">
+                            18
+                        </span>
+
+                    </div>
+
+
+                    <!-- 19 -->
+
+                    <div
+                        class="min-h-24
+                               p-2
+                               rounded-2xl
+                               bg-white/5
+                               border border-white/10">
+
+                        <span class="font-semibold">
+                            19
+                        </span>
+
+                    </div>
+
+
+                    <!-- 20 -->
+
+                    <div
+                        class="min-h-24
+                               p-2
+                               rounded-2xl
+                               bg-white/5
+                               border border-white/10">
+
+                        <span class="font-semibold">
+                            20
+                        </span>
+
+                    </div>
+
+
+                    <!-- 21 -->
+
+                    <div
+                        class="min-h-24
+                               p-2
+                               rounded-2xl
+                               bg-white/5
+                               border border-white/10">
+
+                        <span class="font-semibold">
+                            21
+                        </span>
+
+                    </div>
+
+
+                    <!-- 22 -->
+
+                    <div
+                        class="min-h-24
+                               p-2
+                               rounded-2xl
+                               bg-white/5
+                               border border-white/10">
+
+                        <span class="font-semibold">
+                            22
+                        </span>
+
+                    </div>
+
+
+                    <!-- 23 -->
+
+                    <div
+                        class="min-h-24
+                               p-2
+                               rounded-2xl
+                               bg-white/5
+                               border border-white/10">
+
+                        <span class="font-semibold">
+                            23
+                        </span>
+
+                    </div>
+
+
+                    <!-- 24 -->
+
+                    <div
+                        class="min-h-24
+                               p-2
+                               rounded-2xl
+                               bg-white/5
+                               border border-white/10">
+
+                        <span class="font-semibold">
+                            24
+                        </span>
+
+                    </div>
+
+
+                    <!-- 25 -->
+
+                    <div
+                        class="min-h-24
+                               p-2
+                               rounded-2xl
+                               bg-white/5
+                               border border-white/10">
+
+                        <span class="font-semibold">
+                            25
+                        </span>
+
+                    </div>
+
+
+                    <!-- 26 -->
+
+                    <div
+                        class="min-h-24
+                               p-2
+                               rounded-2xl
+                               bg-white/5
+                               border border-white/10">
+
+                        <span class="font-semibold">
+                            26
+                        </span>
+
+                    </div>
+
+
+                    <!-- 27 -->
+
+                    <div
+                        class="min-h-24
+                               p-2
+                               rounded-2xl
+                               bg-white/5
+                               border border-white/10">
+
+                        <span class="font-semibold">
+                            27
+                        </span>
+
+                    </div>
+
+
+                    <!-- 28 -->
+
+                    <div
+                        class="min-h-24
+                               p-2
+                               rounded-2xl
+                               bg-white/5
+                               border border-white/10">
+
+                        <span class="font-semibold">
+                            28
+                        </span>
+
+                    </div>
+
+
+                    <!-- 29 -->
+
+                    <div
+                        class="min-h-24
+                               p-2
+                               rounded-2xl
+                               bg-white/5
+                               border border-white/10">
+
+                        <span class="font-semibold">
+                            29
+                        </span>
+
+                    </div>
+
+
+                    <!-- 30 -->
+
+                    <div
+                        class="min-h-24
+                               p-2
+                               rounded-2xl
+                               bg-white/5
+                               border border-white/10">
+
+                        <span class="font-semibold">
+                            30
+                        </span>
+
+                    </div>
+
+
+                    <!-- 31 -->
+
+                    <div
+                        class="min-h-24
+                               p-2
+                               rounded-2xl
+                               bg-white/5
+                               border border-white/10">
+
+                        <span class="font-semibold">
+                            31
+                        </span>
+
+                    </div>
+
+                </div>
+
+            </section>
+
+
+            <!-- ========================================
+                 PRÓXIMOS EVENTOS
+            ======================================== -->
+
+            <section
+                class="bg-white/5
+                       backdrop-blur-xl
+                       border border-white/10
+                       rounded-3xl
+                       p-5 md:p-8
+                       shadow-2xl">
+
+
+                <div
+                    class="flex
+                           items-center
+                           justify-between
+                           mb-6
+                           gap-4">
+
+                    <div>
+
+                        <h2 class="text-2xl font-black">
+                            Próximos eventos
+                        </h2>
+
+                        <p class="text-slate-400 text-sm mt-1">
+                            Seus próximos compromissos
+                        </p>
+
+                    </div>
+
+                </div>
+
+
+                <div
+                    id="listaEventos"
+                    class="space-y-4">
+
+                    <!-- Os eventos serão carregados pelo calendario.js -->
+
+                </div>
+
+            </section>
+
+        </main>
+
+    </div>
+
+
+    <!-- ========================================
+         SCRIPTS
+    ======================================== -->
+
+    <script src="../js/calendario.js"></script>
+    <script src="../js/auth.js"></script>
+
+
+    <!-- ========================================
+         MENU MOBILE
+    ======================================== -->
+
+    <script>
+
+        const btnMenuCalendario =
+            document.getElementById("btnMenuCalendario");
+
+        const sidebarCalendario =
+            document.getElementById("sidebarCalendario");
+
+
+        if (btnMenuCalendario && sidebarCalendario) {
+
+            btnMenuCalendario.addEventListener("click", () => {
+
+                sidebarCalendario.classList.toggle("mobile-open");
+
+            });
+
+        }
+
+    </script>
+
+</body>
+
+</html>

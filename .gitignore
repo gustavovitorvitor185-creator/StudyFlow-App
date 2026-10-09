@@ -1,5 +1,9 @@
 node_modules/
+<<<<<<< HEAD
 dist/
 .env
 .env.*
 !.env.example
+=======
+.env
+>>>>>>> ebaaea0856b0a47fba42107448c5c0b65a8f3cbc

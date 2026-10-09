@@ -1,0 +1,122 @@
+/* ===== ESTILOS GERAIS ===== */
+
+body {
+    font-family: 'Segoe UI', sans-serif;
+}
+
+/* ===== CARDS ===== */
+
+.card {
+    background: rgba(255,255,255,0.05);
+    backdrop-filter: blur(16px);
+    border: 1px solid rgba(255,255,255,0.1);
+    border-radius: 24px;
+    padding: 24px;
+    box-shadow: 0 15px 40px rgba(0,0,0,0.3);
+    transition: 0.3s;
+}
+
+.card:hover {
+    transform: translateY(-5px);
+}
+
+/* ===== BOTÕES ===== */
+
+.btn-primary {
+    background: linear-gradient(
+        to right,
+        #3b82f6,
+        #22d3ee
+    );
+    border: none; /* Remove borda padrão de botões HTML */
+    color: white; /* Garante boa leitura sobre o gradiente */
+    padding: 14px 24px;
+    border-radius: 16px;
+    font-weight: bold;
+    cursor: pointer;
+    text-decoration: none;
+    display: inline-block;
+    transition: 0.3s;
+}
+
+.btn-primary:hover {
+    transform: scale(1.05);
+}
+
+/* ===== INPUTS ===== */
+
+.input-modern {
+    width: 100%;
+    background: rgba(15,23,42,0.7);
+    border: 1px solid rgba(255,255,255,0.1);
+    border-radius: 16px;
+    padding: 14px;
+    color: white;
+    outline: none; /* Opcional: remove a borda padrão de foco */
+}
+
+/* ===== BOTÃO PERIGO ===== */
+
+.btn-danger {
+    background: rgba(239,68,68,0.15);
+    color: #fca5a5;
+    padding: 10px 16px;
+    border-radius: 12px;
+    border: 1px solid rgba(239,68,68,0.25);
+    cursor: pointer;
+    text-decoration: none;
+    display: inline-block;
+    transition: 0.3s;
+}
+
+.btn-danger:hover {
+    background: rgba(239,68,68,0.25);
+}
+
+/* ===== LINKS SIDEBAR ===== */
+
+.sidebar-link {
+    display: block;
+    padding: 16px;
+    border-radius: 16px;
+    color: #cbd5e1;
+    text-decoration: none;
+    transition: 0.3s;
+}
+
+.sidebar-link:hover {
+    background: rgba(255,255,255,0.05);
+    border: 1px solid rgba(255,255,255,0.10);
+}
+
+/* ===== TÍTULOS ===== */
+
+.title-gradient {
+    background: linear-gradient(
+        to right,
+        #60a5fa,
+        #67e8f9
+    );
+    -webkit-background-clip: text;
+    background-clip: text; /* Correção: propriedade padrão para compatibilidade */
+    -webkit-text-fill-color: transparent;
+}
+
+/* ===== SCROLLBAR ===== */
+
+::-webkit-scrollbar {
+    width: 8px;
+}
+
+::-webkit-scrollbar-track {
+    background: #0f172a;
+}
+
+::-webkit-scrollbar-thumb {
+    background: #334155;
+    border-radius: 20px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+    background: #475569;
+}

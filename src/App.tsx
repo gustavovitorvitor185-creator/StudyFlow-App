@@ -1,7 +1,7 @@
 import { useEffect, useMemo, useState, type FormEvent, type ReactNode } from 'react'
 import {
-  ArrowDownRight, ArrowRight, BookOpen, CalendarDays, Check, CheckCircle2,
-  Clock3, Flame, GraduationCap, LayoutDashboard, ListTodo, LogOut, Menu,
+  ArrowRight, BookOpen, CalendarDays, Check, CheckCircle2,
+  Clock3, Flame, LayoutDashboard, ListTodo, LogOut, Menu,
   Plus, Search, Send, Sparkles, Target, Timer, Trash2, X,
   PanelLeftClose, PanelLeftOpen, Play, Pause, RotateCcw,
 } from 'lucide-react'

@@ -179,8 +179,8 @@ export default function App() {
               switchPage('Visão geral')
             }}
           >
-            <img className="brand-full" src="/studyflow-logo.png" alt="StudyFlow" />
-            <img className="brand-mark-img" src="/studyflow-mark.png" alt="" />
+            <img className="brand-full" src="/StudyFlow.2.png" alt="StudyFlow" />
+            <img className="brand-mark-img" src="/StudyFlow.png" alt="" />
           </a>
         </div>
 

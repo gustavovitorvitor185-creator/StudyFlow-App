@@ -1770,3 +1770,91 @@ button:disabled {
 @media (prefers-reduced-motion: reduce) {
   .auth-card { animation: none; }
 }
+
+/* Marca da sidebar: wordmark aberto e símbolo compacto recolhido. */
+.sidebar-brand-row { height: 56px; }
+.brand-full { width: min(180px, 100%); height: 42px; object-fit: contain; }
+.brand-mark-img { width: 42px; height: 42px; object-fit: contain; }
+@media (max-width: 760px) {
+  .sidebar-brand-row { height: 52px; }
+  .brand-full, .brand-mark-img { height: 40px; }
+  .brand-mark-img { width: 40px; }
+}
+
+
+/* Marca da sidebar — maior, alinhada e integrada ao acabamento do painel. */
+.sidebar-brand-row {
+  position: relative;
+  height: 74px;
+  margin: -7px -5px 9px;
+  padding: 0 7px;
+  overflow: hidden;
+  border: 1px solid rgba(56, 189, 248, .11);
+  border-radius: 15px;
+  background:
+    radial-gradient(ellipse at 50% 0%, rgba(34, 211, 238, .13), transparent 72%),
+    linear-gradient(145deg, rgba(15, 29, 53, .58), rgba(8, 16, 32, .2));
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, .035);
+}
+
+.sidebar-brand-row::after {
+  position: absolute;
+  right: 14px;
+  bottom: 0;
+  left: 14px;
+  height: 1px;
+  pointer-events: none;
+  content: '';
+  background: linear-gradient(90deg, transparent, rgba(56, 189, 248, .24), transparent);
+}
+
+.sidebar-brand-row .brand {
+  position: relative;
+  z-index: 1;
+}
+
+.sidebar-brand-row .brand-full {
+  width: min(218px, 100%);
+  height: 58px;
+  object-fit: contain;
+  filter: drop-shadow(0 4px 12px rgba(6, 182, 212, .2));
+  transition: filter .2s ease, transform .2s ease;
+}
+
+.sidebar-brand-row:hover .brand-full {
+  filter: drop-shadow(0 5px 16px rgba(6, 182, 212, .32));
+  transform: scale(1.035);
+}
+
+.sidebar-collapsed .sidebar-brand-row {
+  height: 58px;
+  margin: -4px -5px 8px;
+  padding: 0 3px;
+  border-color: transparent;
+  border-radius: 14px;
+  background: transparent;
+  box-shadow: none;
+}
+
+.sidebar-collapsed .sidebar-brand-row::after { display: none; }
+.sidebar-collapsed .sidebar-brand-row .brand-mark-img {
+  width: 42px;
+  height: 42px;
+  filter: drop-shadow(0 4px 12px rgba(6, 182, 212, .2));
+}
+
+@media (max-width: 760px) {
+  .sidebar-brand-row {
+    height: 68px;
+    margin-bottom: 7px;
+  }
+
+  .sidebar-brand-row .brand-full {
+    width: min(210px, 100%);
+    height: 52px;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .sidebar-brand-row .brand-full { transition: none; }
+}

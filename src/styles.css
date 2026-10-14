@@ -1872,6 +1872,32 @@ button:disabled {
   line-height: 1.5;
 }
 
+.auth-forgot {
+  margin-top: -5px;
+  text-align: center;
+}
+
+.auth-forgot button {
+  padding: 4px 8px;
+  color: #67d9f2;
+  background: transparent;
+  border: 0;
+  font: inherit;
+  font-size: 12px;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.auth-forgot button:hover {
+  color: #b4f3fb;
+}
+
+.auth-forgot button:focus-visible {
+  outline: 2px solid #8be8f4;
+  outline-offset: 3px;
+  border-radius: 4px;
+}
+
 .auth-spinner {
   margin: 22px auto 0;
 }

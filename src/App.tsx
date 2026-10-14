@@ -67,6 +67,23 @@ export default function App() {
   const [authLoading, setAuthLoading] = useState(true)
   const [authError, setAuthError] = useState('')
   const [authNotice, setAuthNotice] = useState('')
+  const [passwordRecovery, setPasswordRecovery] = useState(false)
+
+  useEffect(() => {
+    const hashParams = new URLSearchParams(window.location.hash.replace(/^#/, ''))
+    const errorCode = new URLSearchParams(window.location.search).get('error_code')
+      || hashParams.get('error_code')
+
+    if (errorCode === 'otp_expired') {
+      setAuthError('Este link expirou ou já foi usado. Solicite outro e-mail e abra o link mais recente apenas uma vez.')
+    } else if (errorCode) {
+      setAuthError('Não foi possível validar este link. Solicite um novo e-mail de recuperação.')
+    }
+
+    if (window.location.hash.includes('error=')) {
+      window.history.replaceState(null, document.title, `${window.location.pathname}${window.location.search}`)
+    }
+  }, [])
 
   const getLegacyData = () => {
     const legacyTasks = read<(Task & { nome?: string })[]>('tarefasStudyFlow', []).map(task => ({
@@ -165,8 +182,9 @@ export default function App() {
       }
     }
 
-    const { data: { subscription } } = client.auth.onAuthStateChange((_event, session) => {
+    const { data: { subscription } } = client.auth.onAuthStateChange((event, session) => {
       if (!active) return
+      if (event === 'PASSWORD_RECOVERY') setPasswordRecovery(true)
       const authUser = session?.user
       if (!authUser) {
         setUser(null)
@@ -231,11 +249,17 @@ export default function App() {
     const email = String(data.get('email') || '').trim()
     const password = String(data.get('password') || '')
     const fullName = String(data.get('name') || '').trim()
-    const register = data.get('mode') === 'register'
+    const mode = String(data.get('mode') || 'login')
     setAuthError('')
     setAuthNotice('')
     try {
-      if (register) {
+      if (mode === 'forgot') {
+        const { error } = await supabase.auth.resetPasswordForEmail(email, {
+          redirectTo: window.location.origin,
+        })
+        if (error) throw error
+        setAuthNotice('Se este e-mail estiver cadastrado, você receberá um link para redefinir a senha.')
+      } else if (mode === 'register') {
         const { data: result, error } = await supabase.auth.signUp({
           email,
           password,
@@ -262,6 +286,28 @@ export default function App() {
     setTasks([])
     setSubjects([])
     setEvents([])
+  }
+
+  const updatePassword = async (event: FormEvent<HTMLFormElement>) => {
+    event.preventDefault()
+    if (!supabase) return
+    const form = new FormData(event.currentTarget)
+    const password = String(form.get('password') || '')
+    const confirmation = String(form.get('passwordConfirmation') || '')
+    setAuthError('')
+    if (password !== confirmation) {
+      setAuthError('As senhas não coincidem.')
+      return
+    }
+    try {
+      const { error } = await supabase.auth.updateUser({ password })
+      if (error) throw error
+      setPasswordRecovery(false)
+      setAuthNotice('Senha alterada com sucesso. Entre novamente com a nova senha.')
+      await supabase.auth.signOut()
+    } catch (error) {
+      setAuthError(error instanceof Error ? error.message : 'Não foi possível alterar a senha.')
+    }
   }
 
   const toggleTask = async (id: string) => {
@@ -302,6 +348,7 @@ export default function App() {
 
   if (!isSupabaseConfigured || !supabase) return <SetupRequired />
   if (authLoading) return <div className="auth-page"><div className="auth-card"><div className="auth-kicker"><Sparkles size={15} /> STUDYFLOW</div><h1>Conectando sua conta</h1><p className="muted">Aguarde enquanto verificamos sua sessão.</p><div className="spinner auth-spinner" /></div></div>
+  if (passwordRecovery) return <PasswordRecovery onSubmit={updatePassword} error={authError} />
   if (!user) return <Auth onSubmit={signIn} error={authError} notice={authNotice} />
 
   return (
@@ -478,19 +525,23 @@ function Auth({ onSubmit, error, notice }: {
   notice: string
 }) {
   const [register, setRegister] = useState(false)
+  const [forgot, setForgot] = useState(false)
+  const mode = forgot ? 'forgot' : register ? 'register' : 'login'
 
   return (
     <div className="auth-page">
 <div className="auth-card">
         <div className="auth-kicker"><Sparkles size={15} /> APRENDA NO SEU RITMO</div>
-        <h1>{register ? 'Comece sua jornada.' : 'Seu próximo passo começa aqui.'}</h1>
+        <h1>{forgot ? 'Recupere sua senha.' : register ? 'Comece sua jornada.' : 'Seu próximo passo começa aqui.'}</h1>
         <p className="muted">
-          Organize sua rotina e transforme seus objetivos em progresso real.
+          {forgot
+            ? 'Informe seu e-mail e enviaremos um link para criar uma nova senha.'
+            : 'Organize sua rotina e transforme seus objetivos em progresso real.'}
         </p>
 
         <form onSubmit={onSubmit} className="auth-form">
-          <input type="hidden" name="mode" value={register ? 'register' : 'login'} />
-          {register && (
+          <input type="hidden" name="mode" value={mode} />
+          {register && !forgot && (
             <label>
               Seu nome
               <input name="name" placeholder="Como podemos te chamar?" required />
@@ -500,18 +551,20 @@ function Auth({ onSubmit, error, notice }: {
             E-mail
             <input type="email" name="email" placeholder="voce@exemplo.com" required />
           </label>
-          <label>
-            Senha
-            <input
-              type="password"
-              name="password"
-              placeholder="Mínimo de 6 caracteres"
-              minLength={6}
-              required
-            />
-          </label>
+          {!forgot && (
+            <label>
+              Senha
+              <input
+                type="password"
+                name="password"
+                placeholder="Mínimo de 6 caracteres"
+                minLength={6}
+                required
+              />
+            </label>
+          )}
           <button className="primary-button full-button">
-            {register ? 'Criar minha conta' : 'Entrar na minha conta'}
+            {forgot ? 'Enviar link de recuperação' : register ? 'Criar minha conta' : 'Entrar na minha conta'}
             <ArrowRight size={17} />
           </button>
         </form>
@@ -520,15 +573,55 @@ function Auth({ onSubmit, error, notice }: {
         {notice && <div className="success-note" role="status">{notice}</div>}
 
         <p className="auth-switch">
-          {register ? 'Já tem uma conta?' : 'Ainda não tem uma conta?'}{' '}
-          <button onClick={() => setRegister(!register)}>
-            {register ? 'Fazer login' : 'Criar conta'}
+          {forgot ? 'Lembrou sua senha?' : register ? 'Já tem uma conta?' : 'Ainda não tem uma conta?'}{' '}
+          <button type="button" onClick={() => {
+            if (forgot) {
+              setForgot(false)
+            } else {
+              setRegister(!register)
+            }
+          }}>
+            {forgot || register ? 'Fazer login' : 'Criar conta'}
           </button>
         </p>
+
+        {!register && !forgot && (
+          <div className="auth-forgot">
+            <button type="button" onClick={() => setForgot(true)}>Esqueci minha senha</button>
+          </div>
+        )}
 
         <div className="auth-note"><Check size={14} /> Seus dados são sincronizados com segurança na sua conta</div>
       </div>
 
+      <span className="auth-footer">STUDYFLOW · FOCO NO QUE IMPORTA</span>
+    </div>
+  )
+}
+
+function PasswordRecovery({ onSubmit, error }: {
+  onSubmit: (event: FormEvent<HTMLFormElement>) => void
+  error: string
+}) {
+  return (
+    <div className="auth-page">
+      <div className="auth-card">
+        <div className="auth-kicker"><Sparkles size={15} /> PROTEJA SUA CONTA</div>
+        <h1>Crie uma nova senha.</h1>
+        <p className="muted">Escolha uma senha segura com pelo menos 6 caracteres.</p>
+        <form className="auth-form" onSubmit={onSubmit}>
+          <label>
+            Nova senha
+            <input type="password" name="password" placeholder="Mínimo de 6 caracteres" minLength={6} autoComplete="new-password" required />
+          </label>
+          <label>
+            Confirme a nova senha
+            <input type="password" name="passwordConfirmation" placeholder="Digite a senha novamente" minLength={6} autoComplete="new-password" required />
+          </label>
+          {error && <div className="error-note" role="alert">{error}</div>}
+          <button className="primary-button full-button">Salvar nova senha <ArrowRight size={17} /></button>
+        </form>
+      </div>
       <span className="auth-footer">STUDYFLOW · FOCO NO QUE IMPORTA</span>
     </div>
   )

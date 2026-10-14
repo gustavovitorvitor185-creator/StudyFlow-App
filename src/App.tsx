@@ -5,6 +5,7 @@ import {
   Plus, Search, Send, Sparkles, Target, Timer, Trash2, X,
   PanelLeftClose, PanelLeftOpen, Play, Pause, RotateCcw,
 } from 'lucide-react'
+import { isSupabaseConfigured, supabase } from './supabase'
 
 type Task = {
   id: string
@@ -17,7 +18,7 @@ type Task = {
 
 type Subject = { id: string; name: string; color?: string }
 type EventItem = { id: string; name: string; date: string }
-type User = { name: string; email: string }
+type User = { id: string; name: string; email: string }
 type Page =
   | 'Visão geral'
   | 'Tarefas'
@@ -47,7 +48,6 @@ const read = <T,>(key: string, fallback: T): T => {
 const save = (key: string, value: unknown) =>
   localStorage.setItem(key, JSON.stringify(value))
 
-const uid = () => crypto.randomUUID()
 const welcomeName = (name: string) => name.trim().split(/\s+/)[0] || 'estudante'
 
 const dateLabel = new Intl.DateTimeFormat('pt-BR', {
@@ -57,25 +57,30 @@ const dateLabel = new Intl.DateTimeFormat('pt-BR', {
 }).format(new Date())
 
 export default function App() {
-  const [user, setUser] = useState<User | null>(() => read('usuarioStudyFlow', null))
+  const [user, setUser] = useState<User | null>(null)
   const [page, setPage] = useState<Page>('Visão geral')
-  const [tasks, setTasks] = useState<Task[]>(() =>
-    read<(Task & { nome?: string })[]>('tarefasStudyFlow', []).map(task => ({
-      ...task,
-      id: task.id || uid(),
+  const [tasks, setTasks] = useState<Task[]>([])
+  const [subjects, setSubjects] = useState<Subject[]>([])
+  const [events, setEvents] = useState<EventItem[]>([])
+  const [dataLoading, setDataLoading] = useState(false)
+  const [dataError, setDataError] = useState('')
+  const [authLoading, setAuthLoading] = useState(true)
+  const [authError, setAuthError] = useState('')
+  const [authNotice, setAuthNotice] = useState('')
+
+  const getLegacyData = () => {
+    const legacyTasks = read<(Task & { nome?: string })[]>('tarefasStudyFlow', []).map(task => ({
       name: task.name || task.nome || 'Tarefa sem título',
-      done: task.done || false,
-    })),
-  )
-  const [subjects, setSubjects] = useState<Subject[]>(() =>
-    read<(Subject & { nome?: string })[]>('materiasStudyFlow', []).map(subject => ({
-      ...subject,
-      id: subject.id || uid(),
+      subject: task.subject || '',
+      due: task.due || null,
+      done: Boolean(task.done),
+      priority: task.priority || 'Normal',
+    }))
+    const legacySubjects = read<(Subject & { nome?: string })[]>('materiasStudyFlow', []).map(subject => ({
       name: subject.name || subject.nome || 'Matéria',
-    })),
-  )
-  const [events, setEvents] = useState<EventItem[]>(() =>
-    read<(EventItem & { nome?: string; dia?: string })[]>('eventosStudyFlow', []).map(event => {
+      color: subject.color || 'blue',
+    }))
+    const legacyEvents = read<(EventItem & { nome?: string; dia?: string })[]>('eventosStudyFlow', []).map(event => {
       const day = Number(event.dia)
       const today = new Date()
       const legacyDate =
@@ -83,13 +88,12 @@ export default function App() {
           ? `${today.getFullYear()}-${String(today.getMonth() + 1).padStart(2, '0')}-${String(day).padStart(2, '0')}`
           : ''
       return {
-        ...event,
-        id: event.id || uid(),
         name: event.name || event.nome || 'Evento',
         date: event.date || legacyDate || new Date().toISOString().slice(0, 10),
       }
-    }),
-  )
+    })
+    return { legacyTasks, legacySubjects, legacyEvents }
+  }
 
   const [modal, setModal] = useState<'task' | 'subject' | 'event' | null>(null)
   const [mobileOpen, setMobileOpen] = useState(false)
@@ -98,9 +102,94 @@ export default function App() {
   )
   const [query, setQuery] = useState('')
 
-  useEffect(() => save('tarefasStudyFlow', tasks), [tasks])
-  useEffect(() => save('materiasStudyFlow', subjects), [subjects])
-  useEffect(() => save('eventosStudyFlow', events), [events])
+  useEffect(() => {
+    const client = supabase
+    if (!client) {
+      setAuthLoading(false)
+      return
+    }
+
+    let active = true
+    const loadUserData = async (userId: string) => {
+      setDataLoading(true)
+      setDataError('')
+      setTasks([])
+      setSubjects([])
+      setEvents([])
+      try {
+        const [taskResult, subjectResult, eventResult] = await Promise.all([
+          client.from('tasks').select('id,name,subject,due,done,priority').order('created_at', { ascending: false }),
+          client.from('subjects').select('id,name,color').order('created_at', { ascending: false }),
+          client.from('events').select('id,name,date').order('date', { ascending: true }),
+        ])
+        if (taskResult.error) throw taskResult.error
+        if (subjectResult.error) throw subjectResult.error
+        if (eventResult.error) throw eventResult.error
+
+        let loadedTasks = (taskResult.data || []) as Task[]
+        let loadedSubjects = (subjectResult.data || []) as Subject[]
+        let loadedEvents = (eventResult.data || []) as EventItem[]
+        const migrationKey = `studyflow-migrated-${userId}`
+
+        if (!localStorage.getItem(migrationKey)) {
+          if (!loadedTasks.length && !loadedSubjects.length && !loadedEvents.length) {
+            const legacy = getLegacyData()
+            if (legacy.legacyTasks.length) {
+              const result = await client.from('tasks').insert(legacy.legacyTasks).select('id,name,subject,due,done,priority')
+              if (result.error) throw result.error
+              loadedTasks = (result.data || []) as Task[]
+            }
+            if (legacy.legacySubjects.length) {
+              const result = await client.from('subjects').insert(legacy.legacySubjects).select('id,name,color')
+              if (result.error) throw result.error
+              loadedSubjects = (result.data || []) as Subject[]
+            }
+            if (legacy.legacyEvents.length) {
+              const result = await client.from('events').insert(legacy.legacyEvents).select('id,name,date')
+              if (result.error) throw result.error
+              loadedEvents = (result.data || []) as EventItem[]
+            }
+          }
+          localStorage.setItem(migrationKey, 'true')
+        }
+
+        if (active) {
+          setTasks(loadedTasks)
+          setSubjects(loadedSubjects)
+          setEvents(loadedEvents)
+        }
+      } catch (error) {
+        if (active) setDataError(error instanceof Error ? error.message : 'Não foi possível carregar os dados.')
+      } finally {
+        if (active) setDataLoading(false)
+      }
+    }
+
+    const { data: { subscription } } = client.auth.onAuthStateChange((_event, session) => {
+      if (!active) return
+      const authUser = session?.user
+      if (!authUser) {
+        setUser(null)
+        setTasks([])
+        setSubjects([])
+        setEvents([])
+        setAuthLoading(false)
+        return
+      }
+      setUser({
+        id: authUser.id,
+        email: authUser.email || '',
+        name: String(authUser.user_metadata?.full_name || authUser.email?.split('@')[0] || 'Estudante'),
+      })
+      setAuthLoading(false)
+      queueMicrotask(() => { void loadUserData(authUser.id) })
+    })
+
+    return () => {
+      active = false
+      subscription.unsubscribe()
+    }
+  }, [])
 
   useEffect(() => {
     if (!mobileOpen) return
@@ -135,25 +224,85 @@ export default function App() {
     })
   }
 
-  const signIn = (event: FormEvent<HTMLFormElement>) => {
+  const signIn = async (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault()
+    if (!supabase) return
     const data = new FormData(event.currentTarget)
-    const email = String(data.get('email'))
-    const enteredName = String(data.get('name') || email || 'Estudante')
-    const profile = { name: enteredName.split('@')[0], email }
-
-    setUser(profile)
-    save('usuarioStudyFlow', profile)
-    localStorage.setItem('usuarioLogado', 'true')
+    const email = String(data.get('email') || '').trim()
+    const password = String(data.get('password') || '')
+    const fullName = String(data.get('name') || '').trim()
+    const register = data.get('mode') === 'register'
+    setAuthError('')
+    setAuthNotice('')
+    try {
+      if (register) {
+        const { data: result, error } = await supabase.auth.signUp({
+          email,
+          password,
+          options: { data: { full_name: fullName } },
+        })
+        if (error) throw error
+        if (!result.session) {
+          setAuthNotice('Conta criada. Verifique seu e-mail e confirme o cadastro para entrar.')
+        } else {
+          setAuthNotice('Conta criada com sucesso!')
+        }
+      } else {
+        const { error } = await supabase.auth.signInWithPassword({ email, password })
+        if (error) throw error
+      }
+    } catch (error) {
+      setAuthError(error instanceof Error ? error.message : 'Não foi possível autenticar.')
+    }
   }
 
-  const signOut = () => {
+  const signOut = async () => {
+    if (supabase) await supabase.auth.signOut()
     setUser(null)
-    localStorage.removeItem('usuarioStudyFlow')
-    localStorage.removeItem('usuarioLogado')
+    setTasks([])
+    setSubjects([])
+    setEvents([])
   }
 
-  if (!user) return <Auth onSubmit={signIn} />
+  const toggleTask = async (id: string) => {
+    const task = tasks.find(item => item.id === id)
+    if (!task || !supabase) return
+    const { data, error } = await supabase.from('tasks').update({ done: !task.done }).eq('id', id).select('id,name,subject,due,done,priority').single()
+    if (error) setDataError(error.message)
+    else setTasks(current => current.map(item => item.id === id ? data as Task : item))
+  }
+
+  const deleteRecord = async (table: 'tasks' | 'subjects' | 'events', id: string) => {
+    if (!supabase) return
+    const { error } = await supabase.from(table).delete().eq('id', id)
+    if (error) { setDataError(error.message); return }
+    if (table === 'tasks') setTasks(current => current.filter(item => item.id !== id))
+    if (table === 'subjects') setSubjects(current => current.filter(item => item.id !== id))
+    if (table === 'events') setEvents(current => current.filter(item => item.id !== id))
+  }
+
+  const saveEntry = async (data: { name: string; date?: string; subject?: string; priority?: string; color?: string }) => {
+    if (!supabase || !modal) throw new Error('Supabase não está configurado.')
+    if (modal === 'task') {
+      const { data: row, error } = await supabase.from('tasks').insert({ name: data.name, subject: data.subject || '', due: data.date || null, priority: data.priority || 'Normal', done: false }).select('id,name,subject,due,done,priority').single()
+      if (error) throw error
+      setTasks(current => [row as Task, ...current])
+    } else if (modal === 'subject') {
+      const { data: row, error } = await supabase.from('subjects').insert({ name: data.name, color: data.color || 'blue' }).select('id,name,color').single()
+      if (error) throw error
+      setSubjects(current => [row as Subject, ...current])
+    } else {
+      const { data: row, error } = await supabase.from('events').insert({ name: data.name, date: data.date || new Date().toISOString().slice(0, 10) }).select('id,name,date').single()
+      if (error) throw error
+      setEvents(current => [row as EventItem, ...current])
+    }
+    setDataError('')
+    setModal(null)
+  }
+
+  if (!isSupabaseConfigured || !supabase) return <SetupRequired />
+  if (authLoading) return <div className="auth-page"><div className="auth-card"><div className="auth-kicker"><Sparkles size={15} /> STUDYFLOW</div><h1>Conectando sua conta</h1><p className="muted">Aguarde enquanto verificamos sua sessão.</p><div className="spinner auth-spinner" /></div></div>
+  if (!user) return <Auth onSubmit={signIn} error={authError} notice={authNotice} />
 
   return (
     <div className="app-shell">
@@ -261,6 +410,11 @@ export default function App() {
         </header>
 
         <div className="content-wrap">
+          {(dataLoading || dataError) && (
+            <div className={dataError ? 'error-note' : 'data-status'} role={dataError ? 'alert' : 'status'}>
+              {dataError || 'Sincronizando seus dados com segurança…'}
+            </div>
+          )}
           {page === 'Visão geral' && (
             <Dashboard
               user={user}
@@ -270,11 +424,7 @@ export default function App() {
               completed={completed}
               onNavigate={switchPage}
               onAdd={() => setModal('task')}
-              onToggle={id =>
-                setTasks(current =>
-                  current.map(task => task.id === id ? { ...task, done: !task.done } : task),
-                )
-              }
+              onToggle={id => { void toggleTask(id) }}
             />
           )}
 
@@ -284,14 +434,8 @@ export default function App() {
               query={query}
               setQuery={setQuery}
               onAdd={() => setModal('task')}
-              onToggle={id =>
-                setTasks(current =>
-                  current.map(task => task.id === id ? { ...task, done: !task.done } : task),
-                )
-              }
-              onDelete={id =>
-                setTasks(current => current.filter(task => task.id !== id))
-              }
+              onToggle={id => { void toggleTask(id) }}
+              onDelete={id => { void deleteRecord('tasks', id) }}
             />
           )}
 
@@ -299,9 +443,7 @@ export default function App() {
             <SubjectsPage
               subjects={subjects}
               onAdd={() => setModal('subject')}
-              onDelete={id =>
-                setSubjects(current => current.filter(subject => subject.id !== id))
-              }
+              onDelete={id => { void deleteRecord('subjects', id) }}
             />
           )}
 
@@ -309,9 +451,7 @@ export default function App() {
             <CalendarPage
               events={events}
               onAdd={() => setModal('event')}
-              onDelete={id =>
-                setEvents(current => current.filter(item => item.id !== id))
-              }
+              onDelete={id => { void deleteRecord('events', id) }}
             />
           )}
 
@@ -325,48 +465,18 @@ export default function App() {
           kind={modal}
           subjects={subjects}
           onClose={() => setModal(null)}
-          onSave={data => {
-            if (modal === 'task') {
-              setTasks(current => [
-                {
-                  id: uid(),
-                  name: data.name,
-                  subject: data.subject,
-                  due: data.date,
-                  priority: data.priority,
-                  done: false,
-                },
-                ...current,
-              ])
-            }
-
-            if (modal === 'subject') {
-              setSubjects(current => [
-                { id: uid(), name: data.name, color: data.color },
-                ...current,
-              ])
-            }
-
-            if (modal === 'event') {
-              setEvents(current => [
-                {
-                  id: uid(),
-                  name: data.name,
-                  date: data.date || new Date().toISOString().slice(0, 10),
-                },
-                ...current,
-              ])
-            }
-
-            setModal(null)
-          }}
+          onSave={saveEntry}
         />
       )}
     </div>
   )
 }
 
-function Auth({ onSubmit }: { onSubmit: (event: FormEvent<HTMLFormElement>) => void }) {
+function Auth({ onSubmit, error, notice }: {
+  onSubmit: (event: FormEvent<HTMLFormElement>) => void
+  error: string
+  notice: string
+}) {
   const [register, setRegister] = useState(false)
 
   return (
@@ -379,6 +489,7 @@ function Auth({ onSubmit }: { onSubmit: (event: FormEvent<HTMLFormElement>) => v
         </p>
 
         <form onSubmit={onSubmit} className="auth-form">
+          <input type="hidden" name="mode" value={register ? 'register' : 'login'} />
           {register && (
             <label>
               Seu nome
@@ -405,6 +516,9 @@ function Auth({ onSubmit }: { onSubmit: (event: FormEvent<HTMLFormElement>) => v
           </button>
         </form>
 
+        {error && <div className="error-note" role="alert">{error}</div>}
+        {notice && <div className="success-note" role="status">{notice}</div>}
+
         <p className="auth-switch">
           {register ? 'Já tem uma conta?' : 'Ainda não tem uma conta?'}{' '}
           <button onClick={() => setRegister(!register)}>
@@ -412,10 +526,24 @@ function Auth({ onSubmit }: { onSubmit: (event: FormEvent<HTMLFormElement>) => v
           </button>
         </p>
 
-        <div className="auth-note"><Check size={14} /> Seus dados ficam salvos neste dispositivo</div>
+        <div className="auth-note"><Check size={14} /> Seus dados são sincronizados com segurança na sua conta</div>
       </div>
 
       <span className="auth-footer">STUDYFLOW · FOCO NO QUE IMPORTA</span>
+    </div>
+  )
+}
+
+function SetupRequired() {
+  return (
+    <div className="auth-page">
+      <div className="auth-card setup-card">
+        <div className="auth-kicker"><Sparkles size={15} /> CONFIGURAÇÃO NECESSÁRIA</div>
+        <h1>Conecte o StudyFlow ao Supabase</h1>
+        <p className="muted">Crie o arquivo <code>.env.local</code> na pasta principal do projeto com as variáveis abaixo e reinicie o servidor Vite.</p>
+        <pre className="env-example">VITE_SUPABASE_URL=https://seu-projeto.supabase.co{'\n'}VITE_SUPABASE_PUBLISHABLE_KEY=sua_chave_publishable</pre>
+        <p className="auth-note"><Check size={14} /> Use a chave publishable (ou anon legada). Nunca coloque a chave secret ou service_role no navegador.</p>
+      </div>
     </div>
   )
 }
@@ -1235,23 +1363,34 @@ function EntryModal({
     subject?: string
     priority?: string
     color?: string
-  }) => void
+  }) => Promise<void>
 }) {
   const isTask = kind === 'task'
   const isEvent = kind === 'event'
   const title = isTask ? 'Nova tarefa' : isEvent ? 'Novo evento' : 'Nova matéria'
 
-  const submit = (event: FormEvent<HTMLFormElement>) => {
-    event.preventDefault()
-    const data = new FormData(event.currentTarget)
+  const [saving, setSaving] = useState(false)
+  const [error, setError] = useState('')
 
-    onSave({
-      name: String(data.get('name')),
-      date: String(data.get('date') || ''),
-      subject: String(data.get('subject') || ''),
-      priority: String(data.get('priority') || 'Normal'),
-      color: String(data.get('color') || 'blue'),
-    })
+  const submit = async (event: FormEvent<HTMLFormElement>) => {
+    event.preventDefault()
+    if (saving) return
+    const data = new FormData(event.currentTarget)
+    setSaving(true)
+    setError('')
+    try {
+      await onSave({
+        name: String(data.get('name')),
+        date: String(data.get('date') || ''),
+        subject: String(data.get('subject') || ''),
+        priority: String(data.get('priority') || 'Normal'),
+        color: String(data.get('color') || 'blue'),
+      })
+    } catch (saveError) {
+      setError(saveError instanceof Error ? saveError.message : 'Não foi possível salvar. Tente novamente.')
+    } finally {
+      setSaving(false)
+    }
   }
 
   return (
@@ -1324,12 +1463,14 @@ function EntryModal({
           </label>
         )}
 
+        {error && <div className="error-note" role="alert">{error}</div>}
+
         <div className="modal-actions">
-          <button type="button" className="secondary-button" onClick={onClose}>
+          <button type="button" className="secondary-button" onClick={onClose} disabled={saving}>
             Cancelar
           </button>
-          <button className="primary-button">
-            <Plus size={16} /> Adicionar
+          <button className="primary-button" disabled={saving}>
+            {saving ? <span className="spinner" /> : <Plus size={16} />} {saving ? 'Salvando…' : 'Adicionar'}
           </button>
         </div>
       </form>

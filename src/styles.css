@@ -1858,3 +1858,50 @@ button:disabled {
 @media (prefers-reduced-motion: reduce) {
   .sidebar-brand-row .brand-full { transition: none; }
 }
+
+/* Supabase auth and sync feedback */
+.success-note,
+.data-status {
+  margin: 12px 0;
+  padding: 11px 13px;
+  border: 1px solid rgba(45, 212, 191, .22);
+  border-radius: 10px;
+  color: #99f6e4;
+  background: rgba(13, 148, 136, .12);
+  font-size: 13px;
+  line-height: 1.5;
+}
+
+.auth-spinner {
+  margin: 22px auto 0;
+}
+
+.setup-card {
+  width: min(520px, calc(100vw - 32px));
+}
+
+.setup-card h1 {
+  margin-bottom: 12px;
+}
+
+.env-example {
+  overflow-x: auto;
+  margin: 18px 0;
+  padding: 16px;
+  border: 1px solid rgba(148, 163, 184, .18);
+  border-radius: 12px;
+  color: #a5f3fc;
+  background: rgba(2, 8, 23, .56);
+  font: 12px/1.8 ui-monospace, SFMono-Regular, Consolas, monospace;
+}
+
+.setup-card .auth-note {
+  align-items: flex-start;
+  line-height: 1.6;
+}
+
+.modal-actions button:disabled,
+.auth-form button:disabled {
+  cursor: wait;
+  opacity: .7;
+}
